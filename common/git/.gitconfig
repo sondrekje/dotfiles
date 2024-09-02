@@ -1,0 +1,47 @@
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    light = false
+    features = decorations
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
+[push]
+	default = upstream
+	autoSetupRemote = true
+
+[color]
+	ui = auto
+
+[alias]
+	lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>;%Creset' --abbrev-commit --date=relative"
+	recent-branches = for-each-ref --sort=-committerdate refs/heads/ --format='%(refname:short) %(committername) %(committerdate:relative)'
+
+[branch]
+	autosetuprebase = always
+
+[rerere]
+	enabled = true
+
+[rebase]
+	autosquash = true
+
+[init]
+	defaultBranch = master
+	templateDir = ~/.git-templates
+
+[gpg]
+	format = ssh
+
+[commit]
+	gpgsign = true
+

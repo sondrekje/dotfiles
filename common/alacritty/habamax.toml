@@ -1,0 +1,60 @@
+# Color inspiration from vim-habamix scheme (https://github.com/habamax/vim-habamax)
+
+[colors]
+
+[colors.primary]
+background = '#1C1C1C'  # habamax color00 (black)
+foreground = '#9E9E9E'  # habamax color07 (gray)
+dim_foreground = '#767676'    # habamax color08 (darkgray)
+bright_foreground = '#BCBCBC' # habamax color15 (white)
+
+[colors.cursor]
+text = '#1C1C1C'     # habamax color00 (black, for contrast)
+cursor = '#D7875F'   # habamax color09 (red for contrast)
+
+[colors.vi_mode_cursor]
+text = '#1C1C1C'     # habamax color00 (black)
+cursor = '#5F87AF'   # habamax color04 (blue for contrast)
+
+[colors.search.matches]
+foreground = '#1C1C1C' # habamax color00 (black, for matched text background)
+background = '#AFD7AF' # habamax color10 (green)
+
+[colors.search.focused_match]
+foreground = '#1C1C1C' # habamax color00 (black)
+background = '#D7D787' # habamax color11 (yellow, for focused match)
+
+[colors.selection]
+text = '#1C1C1C'       # habamax color00 (black, text inside selected region)
+background = '#D7875F' # habamax color09 (red for high contrast)
+
+[colors.normal]
+black   = '#1C1C1C'    # habamax color00 (black)
+red     = '#D75F5F'    # habamax color01 (dark red)
+green   = '#87AF87'    # habamax color02 (dark green)
+yellow  = '#AFAF87'    # habamax color03 (dark yellow)
+blue    = '#5F87AF'    # habamax color04 (blue)
+magenta = '#AF87AF'    # habamax color05 (dark magenta)
+cyan    = '#5F8787'    # habamax color06 (dark cyan)
+white   = '#9E9E9E'    # habamax color07 (gray)
+
+[colors.bright]
+black   = '#767676'    # habamax color08 (dark gray)
+red     = '#D7875F'    # habamax color09 (red)
+green   = '#AFD7AF'    # habamax color10 (green)
+yellow  = '#D7D787'    # habamax color11 (yellow)
+blue    = '#87AFD7'    # habamax color12 (blue)
+magenta = '#D7AFD7'    # habamax color13 (magenta)
+cyan    = '#87AFAF'    # habamax color14 (cyan)
+white   = '#BCBCBC'    # habamax color15 (white)
+
+[colors.dim]
+black   = '#1C1C1C'    # habamax color00 (black)
+red     = '#D75F5F'    # habamax color01 (dark red)
+green   = '#87AF87'    # habamax color02 (dark green)
+yellow  = '#AFAF87'    # habamax color03 (dark yellow)
+blue    = '#5F87AF'    # habamax color04 (blue)
+magenta = '#AF87AF'    # habamax color05 (dark magenta)
+cyan    = '#5F8787'    # habamax color06 (dark cyan)
+white   = '#9E9E9E'    # habamax color07 (gray)
+

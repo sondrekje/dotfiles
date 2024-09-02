@@ -1,0 +1,78 @@
+# change windows focus
+
+# change window focus within space (hyperKey + vim style bindings)
+hyper - j : yabai -m window --focus south
+hyper - k : yabai -m window --focus north
+hyper - h : yabai -m window --focus west
+hyper - l : yabai -m window --focus east
+
+# focus previous/next window from history (hyperKey + vim style binding)
+hyper - i : yabai -m window --focus next
+hyper - o : yabai -m window --focus prev
+
+# modying layout on screen
+
+# rotate layout clockwise
+hyper - r : yabai -m space --rotate 270
+
+# flip along y-axis
+hyper - y : yabai -m space --mirror y-axis
+# flip along x-axis
+hyper - x : yabai -m space --mirror x-axis
+
+# toggle whether window is split horizontically or vertically
+hyper - s : yabai -m window --toggle split
+
+# float / unfloat window and center on screen
+hyper - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
+#
+# toggle whether or not the focused window should be shown on all spaces
+# hyper - f : yabai -m window --toggle sticky
+# hyper - f : yabai -m space --toggle sticky
+
+# toggly sticky(+float), picture-in-picture
+# does not work without overriding security features :(
+# hyper - p : yabai -m window --toggle sticky --toggle pip
+
+# modify window size
+
+# (max/min)imize a window
+hyper - m : yabai -m window --toggle zoom-fullscreen
+
+# balance out tree of windows (resize to occupy same size)
+hyper - b : yabai -m space --balance
+
+# swap windows (vim style bindings)
+shift + alt - j : yabai -m window --swap south
+shift + alt - k : yabai -m window --swap north
+shift + alt - h : yabai -m window --swap west
+shift + alt - l : yabai -m window --swap east
+
+# move windows and split
+ctrl + alt - j : yabai -m window --warp south
+ctrl + alt - k : yabai -m window --warp north
+ctrl + alt - h : yabai -m window --warp west
+ctrl + alt - l : yabai -m window --warp east
+
+# resize (vim style bindings)
+ctrl + cmd + alt - h : yabai -m window --resize left:-20:0
+ctrl + cmd + alt - j : yabai -m window --resize top:0:20
+ctrl + cmd + alt - k : yabai -m window --resize top:0:-20
+ctrl + cmd + alt - l : yabai -m window --resize left:20:0
+
+# move window to prev and next space
+ctrl + alt - p : yabai -m window --space prev
+ctrl + alt - n : yabai -m window --space next
+
+# focus display focused before current (rotate between - vim go back binding)
+# requires scripting addition :(
+# hyper - o : yabai -m space --focus recent
+
+# move window to specified space and focus
+ctrl + alt - 1 : yabai -m window --space 1 --focus
+ctrl + alt - 2 : yabai -m window --space 2 --focus
+ctrl + alt - 3 : yabai -m window --space 3 --focus
+ctrl + alt - 4 : yabai -m window --space 4 --focus
+ctrl + alt - 5 : yabai -m window --space 5 --focus
+ctrl + alt - 6 : yabai -m window --space 6 --focus
+

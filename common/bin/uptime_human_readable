@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Displays uptime in a human readable format (e.g '20 hours, 57 minutes')
+# I currently use this in my tmux status bar
+
+os=$(uname)
+
+if [[ "$os" == "Darwin" ]]; then
+    timeSinceBootRaw=$(system_profiler SPSoftwareDataType -detailLevel mini | grep "Time since boot")
+
+    timeSinceBootStripped="${timeSinceBootRaw#*:}"
+
+    echo "${timeSinceBootStripped#* }"
+else
+    # https://gist.github.com/ioagel/7f72863b40ed3d7c3b1d60a4d1a081c1
+    uptime | sed -E 's/^[^,]*up *//; s/mins/minutes/; s/hrs?/hours/;
+  s/([[:digit:]]+):0?([[:digit:]]+)/\1 hours, \2 minutes/;
+  s/^1 hours/1 hour/; s/ 1 hours/ 1 hour/;
+  s/min,/minutes,/; s/ 0 minutes,/ less than a minute,/; s/ 1 minutes/ 1 minute/;
+  s/  / /; s/, *[[:digit:]]* users?.*//'
+fi
+

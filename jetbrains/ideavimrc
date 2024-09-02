@@ -1,0 +1,142 @@
+".ideavimrc is a configuration file for IdeaVim plugin. It uses
+" You can find a list of commands here: https://jb.gg/h38q75
+" Find more examples here: https://jb.gg/share-ideavimrc
+map <space> <nop>
+let mapleader="\<space>"
+
+" unbind ex mode, use for formatting instead
+map Q gq
+
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-commentary'
+Plug 'easymotion/vim-easymotion'
+Plug 'preservim/nerdtree'
+
+" ideavim settings
+set ideajoin
+set ideamarks
+set idearefactormode=normal
+set ideastatusicon=gray
+
+" better HJKL
+map H ^
+map L $
+map J }
+map K {
+
+set showmode
+set textobj-indent
+set textobj-entire
+set argtextobj
+set highlightedyank
+set nohlsearch
+set incsearch
+set smartcase
+set gdefault
+
+" ======= BASIC SETTINGS =======
+set number                              " Line numbers
+set tabstop=4 shiftwidth=4 expandtab    " Tab settings
+set wrap                                " Line wrapping
+set showmatch                           " Show matching parentheses
+set scrolloff=5                         " Keep 5 lines around cursor
+set ruler                               " Show line and column number of caret
+set smartcase                           " Case-insensitive search when search term contains uppercase characters
+
+nmap <leader>gc <Action>(GotoClass)
+nmap <leader>ga <Action>(Refactorings.QuickListPopupAction)
+nmap <leader>gf <Action>(GotoFile)
+nmap <leader>gs <Action>(GotoSymbol)
+nmap <leader>gt <Action>(GoToTest)
+nmap <leader>gT <Action>(TextSearchAction)
+nmap <leader>go <Action>(GotoSuperMethod)
+nmap <leader>gd <Action>(GotoDeclaration)
+nmap <leader>gD <Action>(GotoTypeDeclaration)
+nmap <leader>gi <Action>(GotoImplementation)
+nmap <leader>gI <Action>(QuickImplementations)
+nmap <leader>gu <Action>(FindUsages)
+nmap <leader>gU <Action>(FindUsagesInFile)
+nmap <leader>gn <Action>(ShowNavBar)
+
+nmap <leader>gh <Action>(ShowHoverInfo)
+nmap <leader>ge <Action>(ShowErrorDescription)
+nmap <leader>gp <Action>(ShowParameterInfo)
+
+nmap <leader>rg <Action>(FindInPath)
+nmap <leader>rrg <Action>(ReplaceInPath)
+
+nmap <leader>nn :NERDTreeToggle<CR>
+nmap <leader>nf <Action>(SelectInProjectView)
+
+vmap <leader>F <Action>(ReformatCode)
+nmap <leader>sd <Action>(SafeDelete)
+nmap <leader>rn <Action>(RenameElement)
+nmap <leader>oi <Action>(OptimizeImports)
+
+nmap <leader>e <Action>(GotoNextError)
+nmap <leader>E <Action>(GotoPreviousError)
+
+nmap <leader>ggb <Action>(Annotate)
+nmap <leader>ggl <Action>(Vcs.ShowTabbedFileHistory)
+nmap <leader>hl <Action>(HighlightUsagesInFile)
+nmap <leader>ggd <Action>(VcsGroup)
+
+nmap <leader>sh <Action>(LocalHistory.ShowHistory)
+
+" zen
+nmap <leader>Z <Action>(ToggleZenMode)
+
+" ======= IMPROVEMENTS =======
+
+nmap <leader>frf <Action>(RecentChangedFiles)
+" opens popup to search for actions
+nmap <leader>fa <Action>(GotoAction)
+
+nmap <c-o> <Action>(Back)
+nmap <c-i> <Action>(Forward)
+
+nmap <leader>yp <Action>(CopyAbsolutePath)
+
+nmap <leader>rp <Action>(ManageRecentProjects)
+
+map <leader>ns <Action>(NewScratchFile)
+
+" window
+nmap <leader>tT <Action>(ActivateTerminalToolWindow)
+nmap <C-Tab> <Action>(PreviousTab)
+nmap <Tab> <Action>(NextTab)
+map <leader>p <Action>(PinActiveEditorTab)
+
+nmap <leader>1 <Action>(GoToTab1)
+nmap <leader>2 <Action>(GoToTab2)
+nmap <leader>3 <Action>(GoToTab3)
+nmap <leader>4 <Action>(GoToTab4)
+nmap <leader>5 <Action>(GoToTab5)
+nmap <leader>6 <Action>(GoToTab6)
+nmap <leader>7 <Action>(GoToTab7)
+nmap <leader>8 <Action>(GoToTab8)
+nmap <leader>9 <Action>(GoToTab9)
+
+nmap <leader>xx <Action>(CloseContent)
+nmap <leader>xa <Action>(CloseAllEditors)
+nmap <leader>xo <Action>(CloseAllEditorsButActive)
+nmap <leader>xp <Action>(CloseAllUnpinnedEditors)
+map <leader>sH <Action>(SplitHorizontally)
+map <leader>sV <Action>(SplitVertically)
+
+" === Easymotion keybindings
+nmap <leader>ss <Plug>(easymotion-s2)
+nmap <leader>sf <Plug>(easymotion-f2)
+
+" continuous shift
+xnoremap < <gv
+xnoremap > >gv
+
+" alias
+nmap <C-a> ggVG
+" easy copy to system clipboard
+noremap <leader>y "*y
+
+map <leader>WQ <Action>(CloseProject)
+

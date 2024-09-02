@@ -1,0 +1,263 @@
+" ======= BASIC SETTINGS =======
+set number                              " Line numbers
+set tabstop=4 shiftwidth=4 expandtab    " Tab settings
+set wrap                                " Line wrapping
+set showmatch                           " Show matching parentheses
+set incsearch                           " Highlight search as typing
+set scrolloff=3                         " Keep 3 lines around cursor
+set ruler                               " Show line and column number of caret
+set smartcase                           " Case-insensitive search when search term contains uppercase characters
+
+" https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation :)
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" ======= PLUGIN SETUP =======
+call plug#begin('~/.vim/plugged')
+
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-commentary' " comment with gcc/gc in visual
+Plug 'tpope/vim-rsi' " readline keybindings for insert og commandline mode
+Plug 'tpope/vim-sensible' " sensible defaults
+Plug 'tpope/vim-speeddating' " extends increment/decrement to work on dates,times,etc
+Plug 'girishji/autosuggest.vim' " autosuggest for cmdline vim mode
+
+Plug 'ntpeters/vim-better-whitespace' " highlight and clean trailing whitespaces
+
+" vim9+ :)
+Plug 'yegappan/lsp'
+Plug 'girishji/vimcomplete'
+
+Plug 'LunarWatcher/auto-pairs'
+
+Plug 'easymotion/vim-easymotion'
+
+Plug 'preservim/nerdtree'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'majutsushi/tagbar'
+
+Plug 'christoomey/vim-tmux-navigator'
+
+call plug#end()
+
+" ======= THEME SETTINGS =======
+colorscheme habamax
+set background=dark
+
+" airline settings
+let g:airline_theme='base16_gruvbox_dark_hard'
+let g:airline#extensions#ale#enabled = 1 " display errors in statusline
+
+" vim-better-whitespace settings
+let g:strip_max_file_size = 5000 " performance, should tune this a bit
+let g:strip_whitespace_on_save = 1 " auto-strip on save
+let g:strip_whitespace_confirm = 0 " without confirmation
+let g:strip_only_modified_lines = 1 " but only on modified lines as to not cause unnecessary VSC diffs
+let g:show_spaces_that_precede_tabs = 1 " highlight mixing of spaces and tabs
+
+" ======= KEYBINDINGS =======
+map <space> <nop>
+let mapleader="\<space>"
+" unbind ex mode, use for formatting instead
+map Q gq
+
+let g:vimcomplete_tab_enable = 1
+""" lsp bindings
+
+" goto/peek definitions, declariations, references, implementations
+nnoremap <leader>gd :LspGotoDefinition<CR>
+nnoremap <leader>gD :LspPeekDefinition<CR>
+nnoremap <leader>gdi :LspGotoDeclaration<CR>
+nnoremap <leader>gu :LspShowReferences<CR>
+nnoremap <leader>gU :LspPeekReferences<CR>
+nnoremap <leader>gi :LspGotoImpl<CR>
+nnoremap <leader>gI :LspPeekImpl<CR>
+nnoremap <leader>go :LspGotoTypeDef<CR>
+nnoremap <leader>gO :LspPeekTypeDef<CR>
+nnoremap <leader>gI :LspPeekImpl<CR>
+nnoremap <leader>fD :LspSymbolSearch<CR>
+
+" info and documentation
+nnoremap <leader>gh :LspHover<CR>
+vnoremap <leader>gh :LspHover<CR>
+nnoremap <leader>ge :LspDiag current<CR>
+nnoremap <leader>gp :LspShowSignature<CR>
+
+" symbols and actions
+nnoremap <leader>gs :LspDocumentSymbol<CR>
+nnoremap <leader>gs :LspDocumentSymbol<CR>
+nnoremap <leader>ga :LspCodeAction<CR>
+nnoremap <leader>F :LspFormat<CR>
+vnoremap <leader>F :LspFormat<CR>
+nnoremap <leader>rn :LspRename<CR>
+nnoremap <leader>e :LspDiag next<CR>
+nnoremap <leader>E :LspDiag prev<CR>
+nnoremap <leader>le :LspDiag show<CR>
+nnoremap <leader>hl :LspHighlight<CR>
+nnoremap <leader>hlc :LspHighlightClear<CR>
+nnoremap <leader>lsL :LspCodeLens<CR>
+
+nnoremap <leader>rg :Rg<space>
+nnoremap <leader>ff :Files<CR>
+nnoremap <leader>fb :Buffers<CR>
+nnoremap <leader>rb :Lines<space>
+nnoremap <leader>fm :Marks<CR>
+nnoremap <leader>fj :Jumps<CR>
+nnoremap <leader>fh :History<CR>
+nnoremap <leader>rh :History/<space>
+nnoremap <leader>fc :Changes<CR>
+
+nnoremap <leader>nn :NERDTreeToggle<CR>
+nnoremap <leader>ggb :Git blame<CR>
+nnoremap <leader>ggl :Git log<CR>
+nnoremap <leader>ggd :Gdiffsplit<CR>
+nnoremap <leader>ggc :Gcommit<CR>
+
+nmap <C-a> ggVG
+
+" navigate trailing whitespaces
+nnoremap ]w :NextTrailingWhitespace<CR>
+nnoremap [w :PrevTrailingWhitespace<CR>
+
+" ======= IMPROVEMENTS =======
+" Use the mouse for easier transitioning
+set mouse=a
+
+" Navigate splits using Ctrl + arrow key (more intuitive)
+nnoremap <C-j> <C-W> j
+nnoremap <C-k> <C-W> k
+nnoremap <C-h> <C-W> h
+nnoremap <C-l> <C-W> l
+
+" Fast saving with :w using Ctrl + s
+nnoremap <C-s> :w<CR>
+vnoremap <C-s> <Cmd>w<CR>
+
+" easy copy to system clipboard
+noremap <leader>y "*y
+" easy paste from system clipboard
+nnoremap <leader>p :set paste<CR>"+p:set nopaste<CR>
+vnoremap <leader>p <Esc>:set paste<CR>gv"+p:set nopaste<CR>
+
+" repeat last command for each line of a visual selection
+vnoremap . :normal .<CR>
+
+" === FZF keybindings
+
+nmap <F8> :TagbarToggle<CR>
+
+" === Easymotion keybindings
+" Easy navigation with easymotion plugin
+nmap s <Plug>(easymotion-overwin-f2)
+
+" <Leader>f{char} to move to {char}
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+" Move to line
+map <Leader>L <Plug>(easymotion-bd-jk)
+nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+" Move to word
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
+
+" open cheatsheet
+command Cheatsheet new | setlocal buftype=nofile bufhidden=hide noswapfile | execute "resize" . float2nr(&lines * 0.4) | e ~/git/local/cheatsheets/vim/general.md
+
+nnoremap <leader>cheatsheet :Cheatsheet<CR>
+nnoremap <leader>cs :Cheatsheet<CR>
+
+" autocomplete
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_auto_completeopt = 0
+let g:asyncomplete_min_chars = 1
+let g:asyncomplete_prevent_double_pop = 1
+
+" Auto need tree when no file
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" default configuration for now
+let lspOpts = #{autoHighlightDiags: v:true}
+autocmd User LspSetup call LspOptionsSet(lspOpts)
+
+let lspServers = [#{
+    \   name: 'bashls',
+    \   filetype: ['sh', 'bash'],
+    \   path: 'bash-language-server',
+    \   args: ['start']
+    \},
+    \#{
+    \   name: 'vscode-css-server',
+    \   filetype: ['css'],
+    \   path: expand('$NVM_BIN/vscode-css-language-server'),
+    \   args: ['--stdio']
+    \},
+    \#{
+    \   name: 'vscode-eslint-server',
+    \   filetype: ['javascript', 'typescript'],
+    \   path: expand('$NVM_BIN/vscode-eslint-language-server'),
+    \   args: ['--stdio']
+    \},
+    \#{
+    \   name: 'vscode-html-server',
+    \   filetype: ['html'],
+    \   path: expand('$NVM_BIN/vscode-html-language-server'),
+    \   args: ['--stdio']
+    \},
+    \#{
+    \   name: 'vscode-json-server',
+    \   filetype: ['json'],
+    \   path: expand('$NVM_BIN/vscode-json-language-server'),
+    \   args: ['--stdio']
+    \},
+    \#{
+    \   name: 'tsserver',
+    \   filetype: ['javascript', 'typescript'],
+    \   path: 'typescript-language-server',
+    \   args: ['--stdio']
+    \},
+    \#{
+    \   name: 'vimls',
+    \   filetype: ['vim'],
+    \   path: 'vim-language-server',
+    \   args: ['--stdio']
+    \},
+    \#{
+    \   name: 'kotlin-language-server',
+    \   filetype: ['kt'],
+    \   path: 'kotlin-language-server',
+    \   args: ['--stdio']
+    \}]
+
+" https://github.com/junegunn/fzf/blob/master/ADVANCED.md#generating-fzf-color-theme-from-vim-color-schemes
+let g:fzf_colors =
+\ { 'fg':         ['fg', 'Normal'],
+  \ 'bg':         ['bg', 'Normal'],
+  \ 'preview-bg': ['bg', 'NormalFloat'],
+  \ 'hl':         ['fg', 'Comment'],
+  \ 'fg+':        ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':        ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':        ['fg', 'Statement'],
+  \ 'info':       ['fg', 'PreProc'],
+  \ 'border':     ['fg', 'Ignore'],
+  \ 'prompt':     ['fg', 'Conditional'],
+  \ 'pointer':    ['fg', 'Exception'],
+  \ 'marker':     ['fg', 'Keyword'],
+  \ 'spinner':    ['fg', 'Label'],
+  \ 'header':     ['fg', 'Comment'] }
+
+autocmd User LspSetup call LspAddServer(lspServers)
+
+autocmd CursorHoldI * silent! LspShowSignature
+

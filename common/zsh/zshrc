@@ -1,0 +1,119 @@
+[[ -n "${ZSH_DEBUGRC+1}" ]] && zmodload zsh/zprof
+
+if [[ -f "/opt/homebrew/bin/brew" ]] then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# Ensure zinit installed and source
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
+
+setopt promptsubst # required for theme
+setopt inc_append_history # save every cmd before it is executed
+
+zinit wait lucid for \
+    atload"
+        alias ..='cd ..'
+        alias ...='cd ../..'
+        alias ....='cd ../../..'
+        alias .....='cd ../../../..'
+    " \
+	OMZL::git.zsh \
+	OMZP::git
+
+OPT_NAVI_PATH="${XDG_CONFIG_HOME:-${HOME}/.config}/zsh/navi.zsh"
+if [ -f "$OPT_NAVI_PATH" ]; then
+    zinit wait lucid for \
+        is-snippet "$OPT_NAVI_PATH" # navi-widget > ctrl+g to activate
+fi
+
+PS1="READY >" # provide a simple prompt till the theme loads
+
+# only executed if 'sdk' is found in $PATH
+init_sdkman() {
+    if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then # default path
+        # SDKMAN_DIR is set to default path by sdkman-init when it isn't set
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        return 0
+    fi
+
+    # homebrew - we need to explicitly set SDKMAN_DIR
+    export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
+    source "$SDKMAN_DIR/bin/sdkman-init.sh"
+}
+
+zinit wait lucid light-mode for \
+    atinit"zicompinit; zicdreplay"  \
+    atload'command -v sdk &> /dev/null && init_sdkman' \
+    atload'export NVM_DIR="$HOME/.nvm"; [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"' \
+    atload'command -v colima &> /dev/null && export TESTCONTAINERS_HOST_OVERRIDE=$(colima ls -j | jq -r ".address")' \
+    zdharma-continuum/fast-syntax-highlighting \
+    zsh-users/zsh-completions \
+    MichaelAquilina/zsh-you-should-use
+
+zinit wait lucid light-mode for \
+    atinit'eval "$(fzf --zsh)"' \
+    atload'eval "$(zoxide init --cmd z zsh)"' \
+    junegunn/fzf-git.sh \
+    Aloxaf/fzf-tab
+
+export EDITOR=vim
+export HISTFILE=~/.zsh_history
+export HISTSIZE=10000
+export SAVEHIST=$HISTSIZE
+# https://github.com/junegunn/fzf/blob/master/ADVANCED.md#generating-fzf-color-theme-from-vim-color-schemes
+export FZF_DEFAULT_OPTS="--color=bg+:236,bg:234,spinner:139,hl:243,fg:250,header:243,info:137,pointer:139,marker:139,fg+:250,prompt:139,hl+:139"
+
+if command -v bat &> /dev/null; then
+    # preview files using bat
+    export FZF_CTRL_T_OPTS="
+  --walker-skip .git,node_modules,target
+  --preview 'bat -n --color=always {}'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+
+    # colorize --help, left -h as is at it could be shorthand for something else
+    alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+fi
+
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' menu no # handled by fzf
+
+# only support eza and remove fallback to ls with release of debian trixie (eza included in official repo)
+if command -v eza &> /dev/null; then
+    zstyle ':completion:*' list-colors "${(s.:.)EZA_COLORS}"
+    zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --tree --level=3 --color=always $realpath'
+    zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza --tree --level=3 --color=always $realpath'
+
+    alias ls="eza --icons=always"
+else
+    zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+    zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+    zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+
+    alias ls="ls --color"
+fi
+
+alias zsh_profile_startup="time ZSH_DEBUGRC=1 zsh -i -c exit"
+
+export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
+export DOCKER_HOST=unix://$HOME/.colima/default/docker.sock
+
+export PATH="$HOME/bin:$PATH"
+
+[[ -e ~/bin/source_env ]] && source ~/bin/source_env
+[[ -e ~/.env ]] && source ~/.env
+
+bindkey -e # tmux emac keybinding compability, CTRL+a,CTRL+e does not work correctly without this
+bindkey \^U backward-kill-line # restore CTRL+U to clear behind cursor
+autoload edit-command-line; zle -N edit-command-line
+bindkey "^X^E" edit-command-line
+
+zinit ice wait'!' lucid nocd \
+    atload='_omp_precmd'
+zinit snippet "${XDG_CONFIG_HOME:-${HOME}/.config}/zsh/ohmyposh.zsh"
+
+[[ -n "${ZSH_DEBUGRC+1}" ]] && zprof
+

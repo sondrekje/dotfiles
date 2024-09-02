@@ -1,0 +1,55 @@
+# https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/half-life.omp.json
+
+"$schema" = "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json"
+version = 2
+
+[[blocks]]
+alignment = "left"
+type = "prompt"
+
+  [[blocks.segments]]
+  foreground = "#7E46B6"
+  style = "plain"
+  template = "{{ .UserName }} "
+  type = "session"
+
+  [[blocks.segments]]
+  foreground = "#ffffff"
+  style = "plain"
+  template = "in "
+  type = "text"
+
+  [[blocks.segments]]
+  foreground = "#87FF00"
+  style = "plain"
+  template = "{{ .Path }} "
+  type = "path"
+
+    [blocks.segments.properties]
+    style = "full"
+
+  [[blocks.segments]]
+  foreground = "#5FD7FF"
+  style = "plain"
+  template = "<#ffffff>on</> {{ .HEAD }}{{ if .Staging.Changed }}<#87FF00> ● {{ .Staging.String }}</>{{ end }}{{ if .Working.Changed }}<#D75F00> ● {{ .Working.String }}</>{{ end }} "
+  type = "git"
+
+    [blocks.segments.properties]
+    branch_ahead_icon = ""
+    branch_behind_icon = ""
+    branch_gone_icon = ""
+    branch_icon = ""
+    branch_identical_icon = ""
+    cherry_pick_icon = ""
+    commit_icon = ""
+    fetch_status = true
+    merge_icon = ""
+    rebase_icon = ""
+    revert_icon = ""
+    tag_icon = ""
+
+  [[blocks.segments]]
+  foreground = "#D75F00"
+  style = "plain"
+  template = "λ "
+  type = "text"

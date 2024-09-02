@@ -1,0 +1,26 @@
+import = [
+    "~/.config/alacritty/habamax.toml"
+]
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding.x = 10
+padding.y = 10
+
+decorations = "Buttonless"
+
+opacity = 0.75
+blur = true
+
+# option_as_alt = "Both"
+
+[font]
+normal.family = "MesloLGS Nerd Font Mono"
+bold.family = "MesloLGS Nerd Font Mono"
+italic.family = "MesloLGS Nerd Font Mono"
+bold_italic.family = "MesloLGS Nerd Font Mono"
+
+size = 15
+
