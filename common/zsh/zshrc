@@ -66,6 +66,9 @@ export SAVEHIST=$HISTSIZE
 # https://github.com/junegunn/fzf/blob/master/ADVANCED.md#generating-fzf-color-theme-from-vim-color-schemes
 export FZF_DEFAULT_OPTS="--color=bg+:236,bg:234,spinner:139,hl:243,fg:250,header:243,info:137,pointer:139,marker:139,fg+:250,prompt:139,hl+:139"
 
+# https://github.com/MichaelAquilina/zsh-you-should-use?tab=readme-ov-file#hardcore-mode
+export YSU_HARDCORE=1
+
 if command -v bat &> /dev/null; then
     # preview files using bat
     export FZF_CTRL_T_OPTS="
