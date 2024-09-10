@@ -18,7 +18,7 @@ Some dependencies are required, while others are optional. I've tailored this se
 - [fast-syntax-highlighting](https://github.com/zdharma/fast-syntax-highlighting): A fast and feature-rich syntax highlighter.
 - [navi](https://github.com/denisidoro/navi): Cheatsheet tool as a shell widget (activated using `<Ctrl>+g`).
 - [nvm initialization](https://github.com/nvm-sh/nvm): Initializes NVM without affecting shell start-up time or lazy loading (zinit turbo).
-- `sdkman initialization`: Initializes SDKMAN without affecting shell start-up time or lazy loading (zinit turbo).
+- [SDKMAN initialization](https://github.com/sdkman/sdkman-cli): Initializes SDKMAN without affecting shell start-up time or lazy loading (zinit turbo).
 - [zsh-completions](https://github.com/zsh-users/zsh-completions): Additional completions for Zsh.
 - [zsh-you-should-use](https://github.com/MichaelAquilina/zsh-you-should-use): Reminds you to use aliases you have but fail to use.
 - [fzf](https://github.com/junegunn/fzf): Powerful command-line fuzzy-finder, used by many other plugins, including Navi.

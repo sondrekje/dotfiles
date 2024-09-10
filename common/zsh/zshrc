@@ -63,8 +63,15 @@ export EDITOR=vim
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=$HISTSIZE
+
 # https://github.com/junegunn/fzf/blob/master/ADVANCED.md#generating-fzf-color-theme-from-vim-color-schemes
 export FZF_DEFAULT_OPTS="--color=bg+:236,bg:234,spinner:139,hl:243,fg:250,header:243,info:137,pointer:139,marker:139,fg+:250,prompt:139,hl+:139"
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_R_OPTS="
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --color header:italic
+  --header 'CTRL-Y to copy command into clipboard'"
 
 # https://github.com/MichaelAquilina/zsh-you-should-use?tab=readme-ov-file#hardcore-mode
 export YSU_HARDCORE=1
@@ -76,7 +83,7 @@ if command -v bat &> /dev/null; then
     export FZF_CTRL_T_OPTS="
   --walker-skip .git,node_modules,target
   --preview 'bat -n --color=always {}'
-  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+  --bind 'ctrl-u:change-preview-window(down|hidden|)'"
 
     # colorize --help, left -h as is at it could be shorthand for something else
     alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'

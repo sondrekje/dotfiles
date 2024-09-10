@@ -188,6 +188,7 @@ symlink_bin_scripts() {
     declare -A BIN_SCRIPTS=(
         ["$COMMON_SYMLINK_DIR/bin/uptime_human_readable"]="Displays system uptime in a human-readable format|Integrated in tmux configuration"
         ["$COMMON_SYMLINK_DIR/bin/yabai_get_focused_window_label"]="Fetches the focused window label title|Integrated in tmux configuration"
+        ["$COMMON_SYMLINK_DIR/bin/rfv"]="Rg/fzf (toggle CTRL-T) and open in VIM|https://github.com/junegunn/fzf/blob/master/ADVANCED.md#switching-between-ripgrep-mode-and-fzf-mode-using-a-single-key-binding"
     )
 
     echo "Setting up symlinks for bin scripts..."
