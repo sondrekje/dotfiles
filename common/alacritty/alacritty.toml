@@ -14,7 +14,7 @@ decorations = "Buttonless"
 opacity = 0.75
 blur = true
 
-# option_as_alt = "Both"
+option_as_alt = "OnlyLeft"
 
 [font]
 normal.family = "MesloLGS Nerd Font Mono"
