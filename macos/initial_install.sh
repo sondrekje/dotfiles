@@ -25,6 +25,7 @@ declare -A required_cli_tools_zsh_integrated=(
 
 declare -A recommended_cli_tools_zshrc_integrated=(
     [eza]="https://github.com/eza-community/eza|Modern replacement for ls"
+    [fd]="https://github.com/sharkdp/fd|A modern, simple, fast and user-friendly alternative to 'find'"
     [navi]="https://github.com/denisidoro/navi|Interactive cheatsheet tool for the terminal, included as a ZSH widget (CTRL+G)"
 )
 

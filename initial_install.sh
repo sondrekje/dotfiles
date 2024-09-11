@@ -67,7 +67,7 @@ check_os_supported_and_ready || {
 if [[ "$os" == "Darwin" ]]; then
     # https://stackoverflow.com/questions/15371925/how-to-check-if-xcode-command-line-tools-are-installed
     # returns error code 2 if not installed
-    xcode-select -p && echo "XCode developer tools already installed." || {
+    xcode-select -p &> /dev/null && echo "XCode developer tools already installed." || {
         echo "Installing XCode developer tools"
         xcode-select --install
     }
