@@ -7,6 +7,15 @@ set incsearch                           " Highlight search as typing
 set scrolloff=3                         " Keep 3 lines around cursor
 set ruler                               " Show line and column number of caret
 set smartcase                           " Case-insensitive search when search term contains uppercase characters
+syntax enable
+set encoding=UTF-8
+
+if $COLORTERM == 'truecolor'
+    set termguicolors
+endif
+
+map <space> <nop>
+let mapleader="\<space>"
 
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation :)
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
@@ -15,8 +24,17 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+" vim9 script isn't in official debian repo until Trixie release :(
+if has('vim9script')
+    let g:vim9script_supported = 1
+else
+    let g:vim9script_supported = 0
+endif
+
 " ======= PLUGIN SETUP =======
 call plug#begin('~/.vim/plugged')
+
+Plug 'liuchengxu/vim-which-key'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
@@ -25,20 +43,22 @@ Plug 'tpope/vim-commentary' " comment with gcc/gc in visual
 Plug 'tpope/vim-rsi' " readline keybindings for insert og commandline mode
 Plug 'tpope/vim-sensible' " sensible defaults
 Plug 'tpope/vim-speeddating' " extends increment/decrement to work on dates,times,etc
-Plug 'girishji/autosuggest.vim' " autosuggest for cmdline vim mode
 
 Plug 'ntpeters/vim-better-whitespace' " highlight and clean trailing whitespaces
 
 " vim9+ :)
-Plug 'yegappan/lsp'
-Plug 'girishji/vimcomplete'
+if g:vim9script_supported
+    Plug 'yegappan/lsp'
+    Plug 'girishji/vimcomplete'
+    Plug 'girishji/autosuggest.vim' " autosuggest for cmdline vim mode
+endif
 
 Plug 'LunarWatcher/auto-pairs'
 
 Plug 'easymotion/vim-easymotion'
 
 Plug 'preservim/nerdtree'
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'vim-airline/vim-airline'
@@ -49,13 +69,18 @@ Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 
+
+" ======= WhichKey settings
+let g:mapleader = "\<space>"
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+set timeoutlen=300
+
 " ======= THEME SETTINGS =======
 colorscheme habamax
 set background=dark
 
 " airline settings
 let g:airline_theme='base16_gruvbox_dark_hard'
-let g:airline#extensions#ale#enabled = 1 " display errors in statusline
 
 " vim-better-whitespace settings
 let g:strip_max_file_size = 5000 " performance, should tune this a bit
@@ -65,51 +90,53 @@ let g:strip_only_modified_lines = 1 " but only on modified lines as to not cause
 let g:show_spaces_that_precede_tabs = 1 " highlight mixing of spaces and tabs
 
 " ======= KEYBINDINGS =======
-map <space> <nop>
-let mapleader="\<space>"
 " unbind ex mode, use for formatting instead
 map Q gq
 
-let g:vimcomplete_tab_enable = 1
-""" lsp bindings
+if g:vim9script_supported == 1
+    """ lsp bindings
+    let g:vimcomplete_tab_enable = 1
 
-" goto/peek definitions, declariations, references, implementations
-nnoremap <leader>gd :LspGotoDefinition<CR>
-nnoremap <leader>gD :LspPeekDefinition<CR>
-nnoremap <leader>gdi :LspGotoDeclaration<CR>
-nnoremap <leader>gu :LspShowReferences<CR>
-nnoremap <leader>gU :LspPeekReferences<CR>
-nnoremap <leader>gi :LspGotoImpl<CR>
-nnoremap <leader>gI :LspPeekImpl<CR>
-nnoremap <leader>go :LspGotoTypeDef<CR>
-nnoremap <leader>gO :LspPeekTypeDef<CR>
-nnoremap <leader>gI :LspPeekImpl<CR>
-nnoremap <leader>fD :LspSymbolSearch<CR>
+    " goto/peek definitions, declariations, references, implementations
+    nnoremap <leader>gd :LspGotoDefinition<CR>
+    nnoremap <leader>gD :LspPeekDefinition<CR>
+    nnoremap <leader>gdi :LspGotoDeclaration<CR>
+    nnoremap <leader>gu :LspShowReferences<CR>
+    nnoremap <leader>gU :LspPeekReferences<CR>
+    nnoremap <leader>gi :LspGotoImpl<CR>
+    nnoremap <leader>gI :LspPeekImpl<CR>
+    nnoremap <leader>go :LspGotoTypeDef<CR>
+    nnoremap <leader>gO :LspPeekTypeDef<CR>
+    nnoremap <leader>gI :LspPeekImpl<CR>
+    nnoremap <leader>fD :LspSymbolSearch<CR>
 
-" info and documentation
-nnoremap <leader>gh :LspHover<CR>
-vnoremap <leader>gh :LspHover<CR>
-nnoremap <leader>ge :LspDiag current<CR>
-nnoremap <leader>gp :LspShowSignature<CR>
+    " info and documentation
+    nnoremap <leader>gh :LspHover<CR>
+    vnoremap <leader>gh :LspHover<CR>
+    nnoremap <leader>ge :LspDiag current<CR>
+    nnoremap <leader>gp :LspShowSignature<CR>
 
-" symbols and actions
-nnoremap <leader>gs :LspDocumentSymbol<CR>
-nnoremap <leader>gs :LspDocumentSymbol<CR>
-nnoremap <leader>ga :LspCodeAction<CR>
-nnoremap <leader>F :LspFormat<CR>
-vnoremap <leader>F :LspFormat<CR>
-nnoremap <leader>rn :LspRename<CR>
-nnoremap <leader>e :LspDiag next<CR>
-nnoremap <leader>E :LspDiag prev<CR>
-nnoremap <leader>le :LspDiag show<CR>
-nnoremap <leader>hl :LspHighlight<CR>
-nnoremap <leader>hlc :LspHighlightClear<CR>
-nnoremap <leader>lsL :LspCodeLens<CR>
+    " symbols and actions
+    nnoremap <leader>gs :LspDocumentSymbol<CR>
+    nnoremap <leader>ga :LspCodeAction<CR>
+    nnoremap <leader>F :LspFormat<CR>
+    vnoremap <leader>F :LspFormat<CR>
+    nnoremap <leader>rn :LspRename<CR>
+    nnoremap <leader>e :LspDiag next<CR>
+    nnoremap <leader>E :LspDiag prev<CR>
+    nnoremap <leader>le :LspDiag show<CR>
+    nnoremap <leader>hl :LspHighlight<CR>
+    nnoremap <leader>hlc :LspHighlightClear<CR>
+    nnoremap <leader>lsL :LspCodeLens<CR>
+else
+    echo "LSP features disabled as vim9script is not available"
+endif
 
 nnoremap <leader>rg :Rg<space>
 nnoremap <leader>ff :Files<CR>
+nnoremap <leader>fF :Files<CR>
 nnoremap <leader>fb :Buffers<CR>
-nnoremap <leader>rb :Lines<space>
+nnoremap <leader>rl :Lines<space>
 nnoremap <leader>fm :Marks<CR>
 nnoremap <leader>fj :Jumps<CR>
 nnoremap <leader>fh :History<CR>
@@ -187,59 +214,6 @@ let g:asyncomplete_prevent_double_pop = 1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-" default configuration for now
-let lspOpts = #{autoHighlightDiags: v:true}
-autocmd User LspSetup call LspOptionsSet(lspOpts)
-
-let lspServers = [#{
-    \   name: 'bashls',
-    \   filetype: ['sh', 'bash'],
-    \   path: 'bash-language-server',
-    \   args: ['start']
-    \},
-    \#{
-    \   name: 'vscode-css-server',
-    \   filetype: ['css'],
-    \   path: expand('$NVM_BIN/vscode-css-language-server'),
-    \   args: ['--stdio']
-    \},
-    \#{
-    \   name: 'vscode-eslint-server',
-    \   filetype: ['javascript', 'typescript'],
-    \   path: expand('$NVM_BIN/vscode-eslint-language-server'),
-    \   args: ['--stdio']
-    \},
-    \#{
-    \   name: 'vscode-html-server',
-    \   filetype: ['html'],
-    \   path: expand('$NVM_BIN/vscode-html-language-server'),
-    \   args: ['--stdio']
-    \},
-    \#{
-    \   name: 'vscode-json-server',
-    \   filetype: ['json'],
-    \   path: expand('$NVM_BIN/vscode-json-language-server'),
-    \   args: ['--stdio']
-    \},
-    \#{
-    \   name: 'tsserver',
-    \   filetype: ['javascript', 'typescript'],
-    \   path: 'typescript-language-server',
-    \   args: ['--stdio']
-    \},
-    \#{
-    \   name: 'vimls',
-    \   filetype: ['vim'],
-    \   path: 'vim-language-server',
-    \   args: ['--stdio']
-    \},
-    \#{
-    \   name: 'kotlin-language-server',
-    \   filetype: ['kt'],
-    \   path: 'kotlin-language-server',
-    \   args: ['--stdio']
-    \}]
-
 " https://github.com/junegunn/fzf/blob/master/ADVANCED.md#generating-fzf-color-theme-from-vim-color-schemes
 let g:fzf_colors =
 \ { 'fg':         ['fg', 'Normal'],
@@ -257,7 +231,62 @@ let g:fzf_colors =
   \ 'spinner':    ['fg', 'Label'],
   \ 'header':     ['fg', 'Comment'] }
 
-autocmd User LspSetup call LspAddServer(lspServers)
+if g:vim9script_supported
+    let lspOpts = #{}
+    autocmd User LspSetup call LspOptionsSet(lspOpts)
 
-autocmd CursorHoldI * silent! LspShowSignature
+    " TODO: ideally conditonally based on what's available in path too
+    let lspServers = [#{
+        \   name: 'bashls',
+        \   filetype: ['sh', 'bash'],
+        \   path: 'bash-language-server',
+        \   args: ['start']
+        \},
+        \#{
+        \   name: 'vscode-css-server',
+        \   filetype: ['css'],
+        \   path: expand('$NVM_BIN/vscode-css-language-server'),
+        \   args: ['--stdio']
+        \},
+        \#{
+        \   name: 'vscode-eslint-server',
+        \   filetype: ['javascript', 'typescript', 'typescriptreact'],
+        \   path: expand('$NVM_BIN/vscode-eslint-language-server'),
+        \   args: ['--stdio']
+        \},
+        \#{
+        \   name: 'vscode-html-server',
+        \   filetype: ['html'],
+        \   path: expand('$NVM_BIN/vscode-html-language-server'),
+        \   args: ['--stdio']
+        \},
+        \#{
+        \   name: 'vscode-json-server',
+        \   filetype: ['json'],
+        \   path: expand('$NVM_BIN/vscode-json-language-server'),
+        \   args: ['--stdio']
+        \},
+        \#{
+        \   name: 'vscode-markdown-server',
+        \   filetype: ['markdown'],
+        \   path: expand('$NVM_BIN/vscode-markdown-language-server'),
+        \   args: ['--stdio']
+        \},
+        \#{
+        \   name: 'tsserver',
+        \   filetype: ['javascript', 'typescript', 'typescriptreact'],
+        \   path: 'typescript-language-server',
+        \   args: ['--stdio']
+        \},
+        \#{
+        \   name: 'vimls',
+        \   filetype: ['vim'],
+        \   path: 'vim-language-server',
+        \   args: ['--stdio']
+        \}]
+
+    autocmd User LspSetup call LspAddServer(lspServers)
+
+    autocmd CursorHoldI * silent! LspShowSignature
+endif
 

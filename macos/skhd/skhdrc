@@ -36,8 +36,8 @@ hyper - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
 
 # modify window size
 
-# (max/min)imize a window
-hyper - m : yabai -m window --toggle zoom-fullscreen
+# toggle yaba fullscreen mode (match tmux leader+b binding)
+hyper - z : yabai -m window --toggle zoom-fullscreen
 
 # balance out tree of windows (resize to occupy same size)
 hyper - b : yabai -m space --balance
