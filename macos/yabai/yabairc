@@ -12,11 +12,11 @@ yabai -m config                               \
     split_ratio                 0.50          \
     split_type                  auto          \
     auto_balance                off           \
-    top_padding                 12            \
-    bottom_padding              12            \
-    left_padding                12            \
-    right_padding               12            \
-    window_gap                  06            \
+    top_padding                 8             \
+    bottom_padding              8             \
+    left_padding                8             \
+    right_padding               8             \
+    window_gap                  10            \
     layout                      bsp           \
     mouse_modifier              alt           \
     mouse_action1               move          \
@@ -29,15 +29,15 @@ yabai -m rule --add app="^Karabiner-Elements$" manage=off
 yabai -m rule --add app="^Alfred Preferences$" manage=off
 yabai -m rule --add app="^Activity Monitor$" manage=off
 yabai -m rule --add app="^Microsoft Teams$" manage=off
-yabai -m rule --add app="^Microsoft .*$" manage=off
+yabai -m rule --add app="^Microsoft Outlook$" manage=off
 yabai -m rule --add app="^Mattermost$" manage=off
-
-# disabled because sadly requires system integrity protection to be disabled
-# yabai -m signal --add label="flash_focus" event="window_focused" action="yabai -m window \$YABAI_WINDOW_ID --opacity 0.1 && sleep $(yabai -m config window_opacity_duration) && yabai -m window \$YABAI_WINDOW_ID --opacity 0.0"
+yabai -m rule --add app="^Preview$" manage=off
 
 # intellij compability - popup windows
 yabai -m rule --add app="^IntelliJ IDEA$" manage=off
 yabai -m rule --add app="^IntelliJ IDEA$" title="( – )" manage=on
+
+yabai -m rule --add app="^Obsidian$" space=3
 
 borders style=round active_color=0xff65bf00 inactive_color=0xff494d64 width=5.0 &
 echo "Yabai configuration loaded"
