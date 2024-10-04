@@ -148,6 +148,14 @@ setup_zsh_symlinks() {
     fi
 }
 
+setup_neovim_symlinks() {
+    echo "Setting up Neovim configuration..."
+
+    create_symlink "$COMMON_SYMLINK_DIR/nvim/init.lua" "$HOME/.config/nvim/init.lua"
+
+    create_symlink "$COMMON_SYMLINK_DIR/nvim/lua" "$HOME/.config/nvim/lua"
+}
+
 symlink_standalone_components() {
     declare -A SYMLINKS=(
         ["$COMMON_SYMLINK_DIR/alacritty/alacritty.toml"]="$HOME/.config/alacritty/alacritty.toml"
@@ -223,9 +231,13 @@ read -p "Do you want to set up Zsh (including Oh My Posh, and optionally navi)? 
 [[ "$symlink_zsh" == "y" ]] && setup_zsh_symlinks || echo "Skipping Zsh setup..."
 echo ""
 
+read -p "Do you want to set up Neovim configuration? (y/n): " symlink_nvim
+[[ "$symlink_nvim" == "y" ]] && setup_neovim_symlinks || echo "Skipping Neovim setup..."
+echo ""
+
 symlink_standalone_components
 
-read -p "Do you want to set up symlinks for bin scripts (some of these might be utilized in configuraiton files)? (y/n): " symlink_bin
+read -p "Do you want to set up symlinks for bin scripts (some of these might be utilized in configuration files)? (y/n): " symlink_bin
 [[ "$symlink_bin" == "y" ]] && symlink_bin_scripts || echo "Skipping bin scripts symlink setup..."
 echo ""
 

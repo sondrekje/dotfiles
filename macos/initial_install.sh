@@ -7,6 +7,7 @@ declare -A recommended_cli_tools=(
     [universal-ctags]="https://github.com/universal-ctags/ctags|A maintained ctags implementation (required for 'vim-tagbar' plugin to work)"
     [ripgrep]="https://github.com/BurntSushi/ripgrep|Very quick recursive search which respects .gitignore"
     [bat]="https://github.com/sharkdp/bat|A cat clone with syntax highlighting and custom theme support"
+    [neovim]="https://github.com/neovim/neovim|Vim-fork focused on extensability and usability"
     [delta]="https://github.com/dandavison/delta|A syntax-highlighting pager for git, diff, grep and blame output (supports custom themes, same as bat)"
     [hexyl]="https://github.com/sharkdp/hexyl|A modern CLI hex viewer written in Rust"
     [btop]="https://github.com/aristocratos/btop|A fancy system resource monitor tool which suppors custom themes"

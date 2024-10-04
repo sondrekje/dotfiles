@@ -1,8 +1,12 @@
 " ======= BASIC SETTINGS =======
 set number                              " Line numbers
-set tabstop=4 shiftwidth=4 expandtab    " Tab settings
 set wrap                                " Line wrapping
 set showmatch                           " Show matching parentheses
+set tabstop=2
+set shiftwidth=2
+set expandtab                           " spaces instead of tabs
+set autoindent
+
 set incsearch                           " Highlight search as typing
 set scrolloff=3                         " Keep 3 lines around cursor
 set ruler                               " Show line and column number of caret
@@ -39,6 +43,8 @@ Plug 'liuchengxu/vim-which-key'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-sleuth' " detect indent, shiftwidth etc
+Plug 'tpope/vim-unimpaired' " navigate buffers with [b, ]b
 Plug 'tpope/vim-commentary' " comment with gcc/gc in visual
 Plug 'tpope/vim-rsi' " readline keybindings for insert og commandline mode
 Plug 'tpope/vim-sensible' " sensible defaults
@@ -54,6 +60,7 @@ if g:vim9script_supported
 endif
 
 Plug 'LunarWatcher/auto-pairs'
+Plug 'szw/vim-maximizer'
 
 Plug 'easymotion/vim-easymotion'
 
@@ -92,6 +99,14 @@ let g:show_spaces_that_precede_tabs = 1 " highlight mixing of spaces and tabs
 " ======= KEYBINDINGS =======
 " unbind ex mode, use for formatting instead
 map Q gq
+
+nnoremap <leader>sH :split<CR>
+nnoremap <leader>sV :vsplit<CR>
+nnoremap <leader>sB <C-w>=
+nnoremap <leader>sZ :MaximizerToggle<CR>
+
+nnoremap <Tab> :bnext<CR>
+nnoremap <C-Tab> :bprev<CR>
 
 if g:vim9script_supported == 1
     """ lsp bindings
@@ -170,15 +185,15 @@ nnoremap <C-s> :w<CR>
 vnoremap <C-s> <Cmd>w<CR>
 
 " easy copy to system clipboard
+vnoremap <leader>y "*y
 noremap <leader>y "*y
 " easy paste from system clipboard
 nnoremap <leader>p :set paste<CR>"+p:set nopaste<CR>
 vnoremap <leader>p <Esc>:set paste<CR>gv"+p:set nopaste<CR>
+nmap <C-a> ggVG
 
 " repeat last command for each line of a visual selection
 vnoremap . :normal .<CR>
-
-" === FZF keybindings
 
 nmap <F8> :TagbarToggle<CR>
 
