@@ -20,6 +20,7 @@ return {
         lspconfig.cssls.setup {}
         lspconfig.cssmodules_ls.setup {}
         lspconfig.eslint.setup {}
+        lspconfig.jsonls.setup {}
         lspconfig.css_variables.setup {}
         lspconfig.html.setup {}
         lspconfig.kotlin_language_server.setup {}
@@ -39,16 +40,14 @@ return {
                 -- vim.keymap.set("n", "<leader>gd", vim.lsp.buf.type_definition, opts) -- goto type definition
                 opts.desc = "Peek definition(s)"
                 vim.keymap.set("n", "<leader>gd", "<cmd>Telescope lsp_definitions<CR>", opts)      -- peek definitions
-                opts.desc = "Show references"
-                vim.keymap.set("n", "<leader>gu", vim.lsp.buf.references, opts)                    -- show references
                 opts.desc = "Show references via Telescope"
-                vim.keymap.set("n", "<leader>gU", "<cmd>Telescope lsp_references<CR>", opts)       -- peek referenc
+                vim.keymap.set("n", "<leader>gu", "<cmd>Telescope lsp_references<CR>", opts)       -- peek referenc
                 opts.desc = "Goto implementation"
                 vim.keymap.set("n", "<leader>gi", vim.lsp.buf.implementation, opts)                -- goto implementation
                 opts.desc = "Goto type definiton"
                 vim.keymap.set("n", "<leader>go", vim.lsp.buf.type_definition, opts)               -- goto type definition
                 opts.desc = "Search symbols via Telescope"
-                vim.keymap.set("n", "<leader>fD", "<cmd>Telescope lsp_document_symbols<CR>", opts) -- symbol search
+                vim.keymap.set("n", "<leader>fd", "<cmd>Telescope lsp_document_symbols<CR>", opts) -- symbol search
 
                 -- Info and documentation
                 opts.desc = "Show hover info"

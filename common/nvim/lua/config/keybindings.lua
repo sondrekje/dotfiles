@@ -4,6 +4,9 @@ vim.api.nvim_set_keymap('n', '<leader>sH', ':split<CR>', { desc = "Split horizon
 vim.api.nvim_set_keymap('n', '<leader>sV', ':vsplit<CR>', { desc = "Split vertically", noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>sB', '<C-w>=', { desc = "Balance split windows", noremap = true, silent = true })
 
+vim.api.nvim_set_keymap('n', '<leader>xb', ':lua vim.cmd("bd")<CR>', { desc = "Close current buffer", noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>xXb', ':lua vim.cmd("%bd|e#")<CR>', { desc = "Close all buffers except for the current", noremap = true, silent = true })
+
 -- Split navigation using Ctrl + arrow keys
 vim.keymap.set("n", "<C-j>", "<C-W>j")
 vim.keymap.set("n", "<C-k>", "<C-W>k")

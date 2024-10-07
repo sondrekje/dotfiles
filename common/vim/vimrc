@@ -219,6 +219,10 @@ command Cheatsheet new | setlocal buftype=nofile bufhidden=hide noswapfile | exe
 nnoremap <leader>cheatsheet :Cheatsheet<CR>
 nnoremap <leader>cs :Cheatsheet<CR>
 
+nnoremap <leader>xb :bd<CR>
+" close all buffers and re-open last buffer for editing
+nnoremap <leader>xXb :%bd\|e#<CR>
+
 " autocomplete
 let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 0
