@@ -32,21 +32,25 @@ fi
 PS1="READY >" # provide a simple prompt till the theme loads
 
 # only executed if 'sdk' is found in $PATH
-init_sdkman() {
+opt_init_sdkman() {
     if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then # default path
         # SDKMAN_DIR is set to default path by sdkman-init when it isn't set
         source "$HOME/.sdkman/bin/sdkman-init.sh"
         return 0
     fi
 
-    # homebrew - we need to explicitly set SDKMAN_DIR
-    export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
-    source "$SDKMAN_DIR/bin/sdkman-init.sh"
+    os=$(uname -s)
+    if [[ "$os" == "Darwin" ]]; then
+        # homebrew - we need to explicitly set SDKMAN_DIR
+        export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
+        source "$SDKMAN_DIR/bin/sdkman-init.sh"
+        return 0
+    fi
 }
 
 zinit wait lucid light-mode for \
     atinit"zicompinit; zicdreplay"  \
-    atload'command -v sdk &> /dev/null && init_sdkman' \
+    atload'opt_init_sdkman' \
     atload'export NVM_DIR="$HOME/.nvm"; [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"' \
     atload'command -v colima &> /dev/null && export TESTCONTAINERS_HOST_OVERRIDE=$(colima ls -j | jq -r ".address")' \
     zdharma-continuum/fast-syntax-highlighting \
