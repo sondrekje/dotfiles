@@ -63,7 +63,7 @@ zinit wait lucid light-mode for \
     junegunn/fzf-git.sh \
     Aloxaf/fzf-tab
 
-export EDITOR=vim
+export EDITOR=nvim
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=$HISTSIZE
