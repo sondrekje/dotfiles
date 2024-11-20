@@ -1,55 +1,52 @@
-# https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/half-life.omp.json
-
-"$schema" = "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json"
-version = 2
+version = 3
 
 [[blocks]]
-alignment = "left"
-type = "prompt"
+  type = 'prompt'
+  alignment = 'left'
 
   [[blocks.segments]]
-  foreground = "#7E46B6"
-  style = "plain"
-  template = "{{ .UserName }} "
-  type = "session"
+    template = '{{ .UserName }} '
+    foreground = '#7E46B6'
+    type = 'session'
+    style = 'plain'
 
   [[blocks.segments]]
-  foreground = "#ffffff"
-  style = "plain"
-  template = "in "
-  type = "text"
+    template = 'in '
+    foreground = '#ffffff'
+    type = 'text'
+    style = 'plain'
 
   [[blocks.segments]]
-  foreground = "#87FF00"
-  style = "plain"
-  template = "{{ .Path }} "
-  type = "path"
+    template = '{{ .Path }} '
+    foreground = '#87FF00'
+    type = 'path'
+    style = 'plain'
 
     [blocks.segments.properties]
-    style = "full"
+      style = 'full'
 
   [[blocks.segments]]
-  foreground = "#5FD7FF"
-  style = "plain"
-  template = "<#ffffff>on</> {{ .HEAD }}{{ if .Staging.Changed }}<#87FF00> ● {{ .Staging.String }}</>{{ end }}{{ if .Working.Changed }}<#D75F00> ● {{ .Working.String }}</>{{ end }} "
-  type = "git"
+    template = '<#ffffff>on</> {{ .HEAD }}{{ if .Staging.Changed }}<#87FF00> ● {{ .Staging.String }}</>{{ end }}{{ if .Working.Changed }}<#D75F00> ● {{ .Working.String }}</>{{ end }} '
+    foreground = '#5FD7FF'
+    type = 'git'
+    style = 'plain'
 
     [blocks.segments.properties]
-    branch_ahead_icon = ""
-    branch_behind_icon = ""
-    branch_gone_icon = ""
-    branch_icon = ""
-    branch_identical_icon = ""
-    cherry_pick_icon = ""
-    commit_icon = ""
-    fetch_status = true
-    merge_icon = ""
-    rebase_icon = ""
-    revert_icon = ""
-    tag_icon = ""
+      branch_ahead_icon = ''
+      branch_behind_icon = ''
+      branch_gone_icon = ''
+      branch_icon = ''
+      branch_identical_icon = ''
+      cherry_pick_icon = ''
+      commit_icon = ''
+      fetch_status = true
+      merge_icon = ''
+      rebase_icon = ''
+      revert_icon = ''
+      tag_icon = ''
 
   [[blocks.segments]]
-  foreground = "#D75F00"
-  style = "plain"
-  template = "λ "
-  type = "text"
+    template = 'λ '
+    foreground = '#D75F00'
+    type = 'text'
+    style = 'plain'
