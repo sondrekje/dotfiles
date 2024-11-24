@@ -8,23 +8,7 @@ return {
     },
     config = function()
         local lspconfig = require("lspconfig")
-        lspconfig.ts_ls.setup {}
-        lspconfig.bashls.setup {}
-        lspconfig.lua_ls.setup {
-            settings = {
-                Lua = {
-                    diagnostics = { globals = { "vim" } },
-                },
-            },
-        }
-        lspconfig.cssls.setup {}
-        lspconfig.cssmodules_ls.setup {}
-        lspconfig.eslint.setup {}
-        lspconfig.jsonls.setup {}
-        lspconfig.css_variables.setup {}
-        lspconfig.html.setup {}
-        lspconfig.kotlin_language_server.setup {}
-        lspconfig.jdtls.setup {}
+        local mason_lspconfig = require("mason-lspconfig")
 
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
@@ -60,33 +44,61 @@ return {
 
                 -- Symbols and actions
                 opts.desc = "Show document symbols"
-                vim.keymap.set("n", "<leader>gs", vim.lsp.buf.document_symbol, opts)    -- document symbols
+                vim.keymap.set("n", "<leader>gs", vim.lsp.buf.document_symbol, opts)      -- document symbols
                 opts.desc = "Show available code actions"
                 vim.keymap.set({ "v", "n" }, "<leader>ga", vim.lsp.buf.code_action, opts) -- code actions
-                opts.desc = "Format document"
-                vim.keymap.set("n", "<leader>F", vim.lsp.buf.format, opts)              -- format document
-                opts.desc = "Format visual selection"
-                vim.keymap.set("v", "<leader>F", vim.lsp.buf.format, opts)              -- format range
                 opts.desc = "Rename symbol"
-                vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)             -- rename symbol
-                vim.keymap.set("n", "<leader>e", vim.diagnostic.goto_next, opts)        -- next diagnostic
-                vim.keymap.set("n", "<leader>E", vim.diagnostic.goto_prev, opts)        -- previous diagnostic
+                vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)               -- rename symbol
+                vim.keymap.set("n", "<leader>e", vim.diagnostic.goto_next, opts)          -- next diagnostic
+                vim.keymap.set("n", "<leader>E", vim.diagnostic.goto_prev, opts)          -- previous diagnostic
                 opts.desc = "Show diagnostics"
-                vim.keymap.set("n", "<leader>le", vim.diagnostic.show, opts)            -- show diagnostics
+                vim.keymap.set("n", "<leader>le", vim.diagnostic.show, opts)              -- show diagnostics
                 opts.desc = "Highlight"
-                vim.keymap.set("n", "<leader>hl", vim.lsp.buf.document_highlight, opts) -- highlight
+                vim.keymap.set("n", "<leader>hl", vim.lsp.buf.document_highlight, opts)   -- highlight
                 opts.desc = "Clear highlights"
-                vim.keymap.set("n", "<leader>hlc", vim.lsp.buf.clear_references, opts)  -- clear highlights
+                vim.keymap.set("n", "<leader>hlc", vim.lsp.buf.clear_references, opts)    -- clear highlights
                 opts.desc = "Run codelens if available"
-                vim.keymap.set("n", "<leader>lsL", vim.lsp.codelens.run, opts)          -- run codelens if available
+                vim.keymap.set("n", "<leader>lsL", vim.lsp.codelens.run, opts)            -- run codelens if available
             end,
         })
 
-        -- local capabilities = cmp_nvim_lsp.default_capabilities()
+        --local capabilities = cmp_nvim_lsp.default_capabilities()
+        local capabilities = vim.tbl_deep_extend(
+            "force",
+            {},
+            vim.lsp.protocol.make_client_capabilities(),
+            cmp_nvim_lsp.default_capabilities()
+        )
+
         local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
         for type, icon in pairs(signs) do
             local hl = "DiagnosticSign" .. type
             vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
         end
+
+        mason_lspconfig.setup_handlers({
+            function(server_name)
+                lspconfig[server_name].setup({
+                    capabilities = capabilities,
+                })
+            end,
+            ["lua_ls"] = function()
+                -- configure lua server (with special settings)
+                lspconfig["lua_ls"].setup({
+                    capabilities = capabilities,
+                    settings = {
+                        Lua = {
+                            -- make the language server recognize "vim" global
+                            diagnostics = {
+                                globals = { "vim" },
+                            },
+                            completion = {
+                                callSnippet = "Replace",
+                            },
+                        },
+                    },
+                })
+            end,
+        })
     end,
 }

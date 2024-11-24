@@ -47,5 +47,6 @@ return {
                 lualine_z = {},
             }
         })
-    end,
+      end,
 }
+
