@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# I use this script to get the app and title of the active window (which I display in my tmux status bar)
+# Note that this script doesn't really belong in the bin folder as it utilizes AeroSpace which is MacOS specific
+
+# [
+#  {
+#    "app-name" : "Alacritty",
+#    "window-title" : "Alacritty",
+#    "window-id" : 133
+#  }
+# ]
+focusedAppWindow=$(aerospace list-windows --focused --json)
+workspace=$(aerospace list-workspaces --focused)
+
+concatAppAndTitle=$(echo $focusedAppWindow | jq -r '
+    .[] | 
+    (.["app-name"] | if length > 32 then .[0:32] + "…" else . end) as $app |
+    (.["window-title"] | if length > 32 then .[0:32] + "…" else . end) as $title |
+    "\($app) - \($title)"
+')
+
+echo "($workspace) $concatAppAndTitle"

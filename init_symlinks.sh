@@ -166,8 +166,7 @@ symlink_standalone_components() {
     )
 
     if [[ "$OS_TYPE" == "Darwin" ]]; then
-        SYMLINKS["$MACOS_SYMLINK_DIR/yabai/yabairc"]="$HOME/.config/yabai/yabairc"
-        SYMLINKS["$MACOS_SYMLINK_DIR/skhd/skhdrc"]="$HOME/.config/skhd/skhdrc"
+        SYMLINKS["$MACOS_SYMLINK_DIR/aerospace/aerospace.toml"]="$HOME/.config/aerospace/aerospace.toml"
     fi
 
     for source in "${!SYMLINKS[@]}"; do
@@ -195,7 +194,7 @@ symlink_standalone_components() {
 symlink_bin_scripts() {
     declare -A BIN_SCRIPTS=(
         ["$COMMON_SYMLINK_DIR/bin/uptime_human_readable"]="Displays system uptime in a human-readable format|Integrated in tmux configuration"
-        ["$COMMON_SYMLINK_DIR/bin/yabai_get_focused_window_label"]="Fetches the focused window label title|Integrated in tmux configuration"
+        ["$COMMON_SYMLINK_DIR/bin/aerospace_get_focused_window_label"]="Fetches the focused window label title|Integrated in tmux configuration"
         ["$COMMON_SYMLINK_DIR/bin/rfv"]="Rg/fzf (toggle CTRL-T) and open in VIM|https://github.com/junegunn/fzf/blob/master/ADVANCED.md#switching-between-ripgrep-mode-and-fzf-mode-using-a-single-key-binding"
     )
 
@@ -209,11 +208,17 @@ symlink_bin_scripts() {
         IFS='|' read -r description additional_info <<< "${BIN_SCRIPTS[$source]}"
         description=$(echo "$description" | xargs)
 
+        if check_already_symlinked_ok "$source" "$target"; then
+            # nothing to do - symlink already OK
+            continue
+        fi
+
         echo "Script: $(basename "$source")"
         echo "Description: $description"
         echo "Additional Info: $additional_info"
 
         read -p "Would you like to symlink this script? (y/n): " choice
+
         if [[ "$choice" == "y" ]]; then
             create_symlink "$source" "$target"
         else

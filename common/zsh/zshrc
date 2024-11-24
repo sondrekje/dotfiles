@@ -67,6 +67,7 @@ export EDITOR=nvim
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=$HISTSIZE
+export INC_APPEND_HISTORY_TIME=true
 
 # https://github.com/junegunn/fzf/blob/master/ADVANCED.md#generating-fzf-color-theme-from-vim-color-schemes
 export FZF_DEFAULT_OPTS="--color=bg+:236,bg:234,spinner:139,hl:243,fg:250,header:243,info:137,pointer:139,marker:139,fg+:250,prompt:139,hl+:139"

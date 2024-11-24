@@ -204,19 +204,18 @@ prompt_install_sdkman() {
 }
 
 prompt_install_tiling_window_manager() {
-    echo "This will install the yabai tiling window manager, skhd keybinding daemon, and borders to draw active window borders."
-    echo "yabai is a window management that extends the built in window manager of macOS."
-    echo "It is very important that you read on GitHub if you decide to install, as you have to modify some settings as to not conflict with yabai"
-    echo "See the GitHub repository here: https://github.com/koekeishiya/yabai"
-    echo "And also: https://github.com/koekeishiya/skhd, https://github.com/FelixKratz/JankyBorders"
+    echo "This will install the AeroSpace tiling window manager, and JankyBorders to draw active window borders."
+    echo "AeroSpace is a window management that extends the built in window manager of macOS."
+    echo "It is very important that you read on GitHub if you decide to install"
+    echo "See the GitHub repository here: https://github.com/nikitabobko/AeroSpace"
+    echo "And also: https://github.com/FelixKratz/JankyBorders"
     echo
 
-    brew ls yabai &>/dev/null && echo "yabai already installed. Skipping..." || {
+    brew ls aerospace &>/dev/null &>/dev/null && echo "AeroSpace already installed. Skipping..." || {
         read -p "Would you like to install window management tools (y/n)? " install_window_tools
 
         if [[ "$install_window_tools" == "y" ]]; then
-            brew install koekeishiya/formulae/yabai
-            brew install koekeishiya/formulae/skhd
+            brew install --cask nikitabobko/tap/aerospace
             brew install FelixKratz/formulae/borders
         else
             echo "Skipping window management tools."

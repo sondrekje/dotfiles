@@ -18,8 +18,7 @@ Run the script from the root of the dotfiles repo. Do not run it directly from t
 
 ### Configuration Files
 - **karabiner/karabiner.json**: Keyboard mappings via [Karabiner-Elements](https://karabiner-elements.pqrs.org), including Caps Lock as a HyperKey.
-- **yabai/yabairc**: Configuration for [Yabai](https://github.com/koekeishiya/yabai), a macOS tiling window manager.
-- **skhd/skhdrc**: Hotkey daemon config for [SKHD](https://github.com/koekeishiya/skhd) to control window management shortcuts.
+- **aerospace/aerospace.toml**: Configuration for [Aerospace](https://github.com/nikitabobko/AeroSpace), a macOS i3-like tiling window manager.
 
 ## Installation
 

@@ -47,6 +47,7 @@ set smartcase                           " Case-insensitive search when search te
 nmap <leader>gc <Action>(GotoClass)
 nmap <leader>ga <Action>(Refactorings.QuickListPopupAction)
 nmap <leader>gf <Action>(GotoFile)
+nmap <leader>ff <Action>(GotoFile)
 nmap <leader>gs <Action>(GotoSymbol)
 nmap <leader>gt <Action>(GoToTest)
 nmap <leader>gT <Action>(TextSearchAction)
