@@ -141,11 +141,6 @@ setup_zsh_symlinks() {
         target="${ZSH_SYMLINKS[$source]}"
         create_symlink "$source" "$target"
     done
-
-    read -p "Do you want to include Navi widget in the Zsh setup? (y/n): " include_navi
-    if [[ "$include_navi" == "y" ]]; then
-        create_symlink "$COMMON_SYMLINK_DIR/zsh/navi.zsh" "$HOME/.config/zsh/navi.zsh"
-    fi
 }
 
 setup_neovim_symlinks() {
@@ -232,7 +227,7 @@ echo "Starting dotfiles symlink setup..."
 symlink_repository_to_dotfiles
 echo ""
 
-read -p "Do you want to set up Zsh (including Oh My Posh, and optionally navi)? (y/n): " symlink_zsh
+read -p "Do you want to set up Zsh (including Oh My Posh)? (y/n): " symlink_zsh
 [[ "$symlink_zsh" == "y" ]] && setup_zsh_symlinks || echo "Skipping Zsh setup..."
 echo ""
 

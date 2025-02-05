@@ -219,7 +219,23 @@ command Cheatsheet new | setlocal buftype=nofile bufhidden=hide noswapfile | exe
 nnoremap <leader>cheatsheet :Cheatsheet<CR>
 nnoremap <leader>cs :Cheatsheet<CR>
 
-nnoremap <leader>xb :bd<CR>
+" Function to safely close the current buffer and switch to the previous one
+function! CloseCurrentBuffer()
+    " Check if there is an alternate buffer
+    if buflisted(bufnr("#"))
+        " Switch to the previous buffer
+        execute 'bp'
+        " Delete the buffer that was just closed
+        execute 'bd #'
+    else
+        " If no alternate buffer exists, simply delete the current buffer
+        execute 'bd'
+    endif
+endfunction
+
+" close current buffer and focus previous
+nnoremap <leader>xb :call CloseCurrentBuffer()<CR>
+"
 " close all buffers and re-open last buffer for editing
 nnoremap <leader>xXb :%bd\|e#<CR>
 

@@ -103,6 +103,7 @@ plus = 'minus'
 # '''
 alt-shift-cmd-ctrl-enter = '''exec-and-forget open -na alacritty --args --working-directory ~ -e tmux'''
 alt-shift-enter = '''exec-and-forget open -na alacritty --args --working-directory ~ -e tmux a'''
+alt-shift-cmd-ctrl-f = '''exec-and-forget open -na Firefox\ Developer\ Edition'''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 
@@ -206,6 +207,10 @@ run = 'move-node-to-workspace S'
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Teams'
+run = 'move-node-to-workspace S'
+
+[[on-window-detected]]
+if.app-id = 'Mattermost.Desktop'
 run = 'move-node-to-workspace S'
 # TODO
 

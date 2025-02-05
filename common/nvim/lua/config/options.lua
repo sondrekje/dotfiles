@@ -47,3 +47,16 @@ vim.opt.splitbelow = true
 vim.opt.smoothscroll = true
 vim.opt.foldmethod = "indent"
 
+local yank_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = yank_group,
+  pattern = "*",
+  callback = function()
+    vim.highlight.on_yank({
+      higroup = 'Visual',
+      timeout = 300,
+    })
+  end,
+})
+

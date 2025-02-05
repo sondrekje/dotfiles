@@ -16,6 +16,7 @@ declare -A recommended_cli_tools=(
     [kubernetes-cli]="https://github.com/kubernetes/kubectl|kubectl - Kubernetes command-line interface"
     [openshift-cli]="https://github.com/openshift/oc|The OpenShift command-line interface"
     [stern]="https://github.com/stern/stern|Multi pod and container log tailing for kubernetes"
+    [pgcli]="https://github.com/dbcli/pgcli|Postgres CLI with autocompletion and syntax highlighting"
 )
 
 declare -A required_cli_tools_zsh_integrated=(
