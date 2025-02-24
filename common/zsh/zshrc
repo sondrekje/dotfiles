@@ -32,12 +32,6 @@ opt_init_sdkman() {
     fi
 }
 
-zinit wait lucid light-mode for \
-    atinit'eval "$(fzf --zsh)"' \
-    atload'eval "$(zoxide init --cmd z zsh)"' \
-    junegunn/fzf-git.sh \
-    Aloxaf/fzf-tab
-
 zinit wait lucid for \
     atload"
         alias ..='cd ..'
@@ -121,6 +115,12 @@ bindkey -e # tmux emac keybinding compability, CTRL+a,CTRL+e does not work corre
 bindkey \^U backward-kill-line # restore CTRL+U to clear behind cursor
 autoload edit-command-line; zle -N edit-command-line
 bindkey "^X^E" edit-command-line
+
+zinit wait lucid light-mode for \
+    atinit'eval "$(fzf --zsh)"' \
+    atload'eval "$(zoxide init --cmd z zsh)"' \
+    junegunn/fzf-git.sh \
+    Aloxaf/fzf-tab
 
 zinit ice wait'!' lucid nocd \
     atload='_omp_precmd'

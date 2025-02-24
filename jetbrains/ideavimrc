@@ -107,6 +107,8 @@ map <leader>ns <Action>(NewScratchFile)
 nmap <leader>tT <Action>(ActivateTerminalToolWindow)
 nmap <C-Tab> <Action>(PreviousTab)
 nmap <Tab> <Action>(NextTab)
+nmap [b <Action>(PreviousTab)
+nmap ]b <Action>(NextTab)
 map <leader>p <Action>(PinActiveEditorTab)
 
 nmap <leader>1 <Action>(GoToTab1)
