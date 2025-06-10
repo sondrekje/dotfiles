@@ -71,6 +71,13 @@ return {
         "<cmd>Trouble todo toggle filter = {tag = {TODO,FIX,FIXME}}<CR>",
         desc = "Toggle TODO/FIX/FIXME (Trouble)",
       },
+      {
+        "<leader>fT",
+        function()
+          Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } })
+        end,
+        desc = "Todo/Fix/Fixme",
+      },
     },
   },
 }

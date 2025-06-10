@@ -129,21 +129,21 @@ return {
       desc = "Recent",
     },
     -- Git
-    {
-      "<leader>gBB",
-      function()
-        Snacks.gitbrowse()
-      end,
-      desc = "Git Browse",
-      mode = { "n", "v" },
-    },
-    {
-      "<leader>gbB",
-      function()
-        Snacks.picker.git_branches()
-      end,
-      desc = "Git Branches",
-    },
+    -- {
+    --   "<leader>gBB",
+    --   function()
+    --     Snacks.gitbrowse()
+    --   end,
+    --   desc = "Git Browse",
+    --   mode = { "n", "v" },
+    -- },
+    -- {
+    --   "<leader>gbB",
+    --   function()
+    --     Snacks.picker.git_branches()
+    --   end,
+    --   desc = "Git Branches",
+    -- },
     {
       "<leader>gl",
       function()
@@ -173,7 +173,7 @@ return {
       desc = "Git Stash",
     },
     {
-      "<leader>fgD",
+      "<leader>gD",
       function()
         Snacks.picker.git_diff()
       end,

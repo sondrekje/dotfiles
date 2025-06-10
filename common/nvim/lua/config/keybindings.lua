@@ -34,10 +34,11 @@ vim.keymap.set({ "n", "v" }, "<leader>d", '"_d')
 -- Repeat last command for each line in a visual selection
 vim.keymap.set("v", ".", ":normal .<CR>")
 
-vim.keymap.set("n", "<leader>ggb", ":Git blame<CR>")
-vim.keymap.set("n", "<leader>ggl", ":Git log<CR>")
-vim.keymap.set("n", "<leader>ggd", ":Gdiffsplit<CR>")
-vim.keymap.set("n", "<leader>ggc", ":Gcommit<CR>")
+vim.keymap.set("n", "<leader>gb", ":Git blame<CR>")
+vim.keymap.set("n", "<leader>go", "<Cmd>GBrowse<CR>", { silent = true, noremap = true })
+vim.keymap.set("n", "<leader>gd", ":Gdiffsplit<CR>")
+-- vim.keymap.set("n", "<leader>ggl", ":Git log<CR>")
+-- vim.keymap.set("n", "<leader>ggc", ":Gcommit<CR>")
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
