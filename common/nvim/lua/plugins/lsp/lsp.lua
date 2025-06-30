@@ -5,11 +5,10 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      { "mason.nvim", version = "1.11.0" },
-      { "williamboman/mason-lspconfig.nvim", config = function() end, version = "1.32.0" },
-      "hrsh7th/cmp-nvim-lsp",
+      { "mason-org/mason.nvim" },
+      { "mason-org/mason-lspconfig.nvim" },
       { "folke/lazydev.nvim", ft = "lua", opts = {} },
-      -- { "antosha417/nvim-lsp-file-operations", config = true },
+      -- { "antosha418/nvim-lsp-file-operations", config = true },
     },
     opts = function()
       ---@class PluginLspOpts
@@ -30,6 +29,20 @@ return {
               [vim.diagnostic.severity.WARN] = icons.Warn,
               [vim.diagnostic.severity.HINT] = icons.Hint,
               [vim.diagnostic.severity.INFO] = icons.Info,
+            },
+          },
+        },
+        inlay_hints = {
+          enabled = true,
+        },
+        codelens = {
+          enabled = true,
+        },
+        capabilities = {
+          workspace = {
+            fileOperations = {
+              didRename = true,
+              willRename = true,
             },
           },
         },
@@ -59,88 +72,90 @@ return {
       return ret
     end,
     config = function(_, options)
-      for severity, icon in pairs(options.diagnostics.signs.text) do
-        local name = vim.diagnostic.severity[severity]:lower():gsub("^%l", string.upper)
-        name = "DiagnosticSign" .. name
-        vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
-      end
-
-      local servers = options.servers
-
       vim.diagnostic.config(vim.deepcopy(options.diagnostics))
 
-      local cmp_nvim_lsp = require("cmp_nvim_lsp")
-
-      local capabilities = vim.tbl_deep_extend(
-        "force",
-        {},
-        vim.lsp.protocol.make_client_capabilities(),
-        cmp_nvim_lsp.default_capabilities(),
-        options.capabilities or {}
-      )
-
-      local function setup(server)
-        local server_opts = vim.tbl_deep_extend("force", {
-          capabilities = vim.deepcopy(capabilities),
-        }, servers[server] or {})
-        if server_opts.enabled == false then
-          return
-        end
-
-        if options.setup[server] then
-          if options.setup[server](server, server_opts) then
-            return
-          end
-        elseif options.setup["*"] then
-          if options.setup["*"](server, server_opts) then
-            return
-          end
-        end
-        require("lspconfig")[server].setup(server_opts)
+      for name, cfg in pairs(options.servers) do
+        vim.lsp.config(
+          name,
+          vim.tbl_deep_extend("force", {
+            capabilities = vim.tbl_deep_extend(
+              "force",
+              {},
+              vim.lsp.protocol.make_client_capabilities(),
+              require("blink.cmp").get_lsp_capabilities(),
+              options.capabilities or {}
+            ),
+          }, cfg)
+        )
       end
 
-      -- get all the servers that are available through mason-lspconfig
-      local mlsp = require("mason-lspconfig")
-      local all_mslp_servers = vim.tbl_keys(require("mason-lspconfig.mappings.server").lspconfig_to_package)
-      local ensure_installed = {} ---@type string[]
-      for server, server_opts in pairs(servers) do
-        if server_opts then
-          server_opts = server_opts == true and {} or server_opts
-          if server_opts.enabled ~= false then
-            -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
-            if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
-              setup(server)
-            else
-              ensure_installed[#ensure_installed + 1] = server
-            end
-          end
-        end
-      end
-
-      mlsp.setup({
-        ensure_installed = vim.tbl_deep_extend("force", ensure_installed, options.ensure_installed or {}),
-        handlers = { setup },
+      require("mason").setup()
+      require("mason-lspconfig").setup({
+        ensure_installed = options.ensure_installed or { "lua_ls" },
+        automatic_enable = true,
       })
 
       vim.api.nvim_create_autocmd("LspAttach", {
-        group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-        callback = function(ev)
-          local opts = { buffer = ev.buf, silent = true }
+        group = vim.api.nvim_create_augroup("my.lsp", {}),
+        callback = function(args)
+          local buf = args.buf
+          local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
 
-          -- Symbols and actions
-          opts.desc = "Show available code actions"
-          vim.keymap.set({ "v", "n" }, "<leader>ga", vim.lsp.buf.code_action, opts) -- code actions
-          vim.keymap.set({ "v", "n" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- code actions
+          -- Inlay‐hints on attach
+          if options.inlay_hints.enabled then
+            local excludeFor = options.inlay_hints.exclude or {}
+            if client:supports_method("textDocument/inlayHint") then
+              local ft = vim.bo[buf].filetype
+              if vim.bo[buf].buftype == "" and not vim.tbl_contains(excludeFor, ft) then
+                vim.lsp.inlay_hint.enable(true, { bufnr = buf })
+              end
+            end
+          end
 
-          opts.desc = "Rename symbol"
-          vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+          -- Codelens on attach
+          if options.codelens.enabled then
+            if client:supports_method("textDocument/codeLens") then
+              vim.lsp.codelens.refresh()
+              vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+                buffer = buf,
+                callback = vim.lsp.codelens.refresh,
+              })
+            end
+          end
+
+          if client:supports_method("textDocument/codeAction") then
+            local bufopts = { buffer = buf, silent = true, desc = "Remove Unused Imports" }
+            vim.keymap.set("n", "grU", function()
+              vim.lsp.buf.code_action({
+                context = {
+                  diagnostics = {},
+                  ---@diagnostic disable-next-line: assign-type-mismatch
+                  only = { "source.removeUnusedImports" },
+                },
+                apply = true,
+              })
+            end, bufopts)
+          end
+
+          local bufopts = { buffer = buf, silent = true, desc = "Add Missing Imports" }
+          vim.keymap.set("n", "grM", function()
+            vim.lsp.buf.code_action({
+              context = {
+                diagnostics = {}, -- must include this even if empty
+                only = {
+                  ---@diagnostic disable-next-line: assign-type-mismatch
+                  "source.addMissingImports",
+                },
+              },
+              apply = true, -- auto-apply the single returned action
+            })
+          end, bufopts)
         end,
       })
     end,
   },
   {
-
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     cmd = "Mason",
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     build = ":MasonUpdate",

@@ -4,7 +4,7 @@ return {
   dependencies = { "rafamadriz/friendly-snippets" },
 
   -- use a release tag to download pre-built binaries
-  version = "1.*",
+  build = "cargo build --release",
   -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
   -- build = 'cargo build --release',
   -- If you use nix, you can build from source using latest nightly rust with:
@@ -26,10 +26,9 @@ return {
     --
     -- See :h blink-cmp-config-keymap for defining your own keymap
     keymap = {
-      preset = "default",
+      preset = "enter",
       ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
       ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
-      ["<CR>"] = { "accept", select = false },
     },
 
     appearance = {
@@ -38,6 +37,7 @@ return {
       nerd_font_variant = "mono",
     },
 
+    signature = { enabled = true },
     -- (Default) Only show the documentation popup when manually triggered
     completion = {
       documentation = { auto_show = true, auto_show_delay_ms = 200 },

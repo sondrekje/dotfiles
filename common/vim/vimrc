@@ -29,10 +29,10 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 
 " vim9 script isn't in official debian repo until Trixie release :(
-if has('vim9script')
-    let g:vim9script_supported = 1
+if has('vim9script') && 0 " disabled
+    let g:usevim9script = 1
 else
-    let g:vim9script_supported = 0
+    let g:usevim9script = 0
 endif
 
 " ======= PLUGIN SETUP =======
@@ -53,7 +53,7 @@ Plug 'tpope/vim-speeddating' " extends increment/decrement to work on dates,time
 Plug 'ntpeters/vim-better-whitespace' " highlight and clean trailing whitespaces
 
 " vim9+ :)
-if g:vim9script_supported
+if g:usevim9script
     Plug 'yegappan/lsp'
     Plug 'girishji/vimcomplete'
     Plug 'girishji/autosuggest.vim' " autosuggest for cmdline vim mode
@@ -108,7 +108,7 @@ nnoremap <leader>sZ :MaximizerToggle<CR>
 nnoremap <Tab> :bnext<CR>
 nnoremap <C-Tab> :bprev<CR>
 
-if g:vim9script_supported == 1
+if g:usevim9script == 1
     """ lsp bindings
     let g:vimcomplete_tab_enable = 1
 
@@ -143,8 +143,6 @@ if g:vim9script_supported == 1
     nnoremap <leader>hl :LspHighlight<CR>
     nnoremap <leader>hlc :LspHighlightClear<CR>
     nnoremap <leader>lsL :LspCodeLens<CR>
-else
-    echo "LSP features disabled as vim9script is not available"
 endif
 
 nnoremap <leader>rg :Rg<space>
@@ -266,7 +264,7 @@ let g:fzf_colors =
   \ 'spinner':    ['fg', 'Label'],
   \ 'header':     ['fg', 'Comment'] }
 
-if g:vim9script_supported
+if g:usevim9script
     let lspOpts = #{}
     autocmd User LspSetup call LspOptionsSet(lspOpts)
 
@@ -324,4 +322,3 @@ if g:vim9script_supported
 
     autocmd CursorHoldI * silent! LspShowSignature
 endif
-

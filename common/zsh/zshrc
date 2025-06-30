@@ -86,20 +86,18 @@ fi
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' menu no # handled by fzf
 
-# only support eza and remove fallback to ls with release of debian trixie (eza included in official repo)
-if command -v eza &> /dev/null; then
-    zstyle ':completion:*' list-colors "${(s.:.)EZA_COLORS}"
-    zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --tree --level=3 --color=always $realpath'
-    zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza --tree --level=3 --color=always $realpath'
+zstyle ':completion:*' list-colors "${(s.:.)EZA_COLORS}"
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --tree --level=3 --color=always $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza --tree --level=3 --color=always $realpath'
 
-    alias ls="eza --icons=always"
-else
-    zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-    zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-    zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+alias ls="eza --icons=always"
 
-    alias ls="ls --color"
+if [[ -n "$TMUX" ]]; then
+    zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+    zstyle ':fzf-tab:*' popup-pad 30 0
+    zstyle ':fzf-tab:*' popup-min-size 50 8
 fi
+
 
 alias zsh_profile_startup="time ZSH_DEBUGRC=1 zsh -i -c exit"
 
@@ -128,6 +126,10 @@ zinit snippet "${XDG_CONFIG_HOME:-${HOME}/.config}/zsh/ohmyposh.zsh"
 
 zinit ice wait'1' lucid has"rbenv"
 zinit light _local/rbenv
+
+if command -v rustup >/dev/null 2>&1; then
+  export PATH="$(brew --prefix rustup)/bin:$PATH"
+fi
 
 [[ -n "${ZSH_DEBUGRC+1}" ]] && zprof
 
