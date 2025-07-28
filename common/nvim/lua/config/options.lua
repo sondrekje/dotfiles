@@ -153,6 +153,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "startuptime",
     "tsplayground",
     "fugitiveblame",
+    "dap-float",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false

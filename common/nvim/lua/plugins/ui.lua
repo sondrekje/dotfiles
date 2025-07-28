@@ -97,6 +97,12 @@ return {
           },
           lualine_x = {
             Snacks.profiler.status(),
+            -- stylua: ignore
+            {
+              function() return "  " .. require("dap").status() end,
+              cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
+              color = function() return { fg = Snacks.util.color("Debug") } end,
+            },
             {
               require("lazy.status").updates,
               cond = require("lazy.status").has_updates,
@@ -126,7 +132,7 @@ return {
           lualine_y = { "progress" },
           lualine_z = { "location" },
         },
-        extensions = { "nvim-tree", "lazy" },
+        extensions = { "nvim-tree", "lazy", "fzf", "mason", "nvim-dap-ui", "trouble" },
       }
 
       if vim.g.trouble_lualine then

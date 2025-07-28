@@ -3,7 +3,7 @@ return {
     "mfussenegger/nvim-dap",
     dependencies = {
       "rcarriga/nvim-dap-ui",
-      "theHamsta/nvim-dap-virtual-text",
+      { "theHamsta/nvim-dap-virtual-text", opts = {} },
     },
     keys = {
       { "<leader>d", "", desc = "+debug" },
@@ -113,7 +113,9 @@ return {
         ensure_installed = {},
       })
 
-      require("dap").adapters["pwa-node"] = {
+      local dap = require("dap")
+
+      dap.adapters["pwa-node"] = {
         type = "server",
         host = "localhost",
         port = "${port}",
@@ -123,6 +125,40 @@ return {
           args = { vim.env.MASON .. "/packages/" .. "js-debug-adapter" .. "/js-debug/src/dapDebugServer.js", "${port}" },
         },
       }
+
+      local repl = require("dap.repl")
+      repl.commands = vim.tbl_extend("force", repl.commands, {
+        -- alias:
+        exit = { "exit", ".exit", ".quit" },
+        -- custom:
+        custom_commands = {
+          [".echo"] = function(text)
+            dap.repl.append(text)
+          end,
+          [".copy"] = function(expr)
+            local session = dap.session()
+            if not session or not session.current_frame then
+              print("❌ No active DAP session")
+              return
+            end
+            local frameId = session.current_frame and session.current_frame.id
+
+            session:request(
+              "evaluate",
+              { expression = expr, context = "clipboard", frameId = frameId },
+              function(err, response)
+                if err then
+                  print("DAP error: " .. vim.inspect(err))
+                  return
+                end
+                local unq = response.result:gsub('^"(.*)"$', "%1"):gsub('\\"', '"')
+                vim.fn.setreg("+", unq)
+                print("Copied to system clipboard")
+              end
+            )
+          end,
+        },
+      })
     end,
   },
   {

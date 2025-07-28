@@ -17,11 +17,6 @@ return {
       },
       status = { virtual_text = true },
       output = { open_on_run = true },
-      -- quickfix = {
-      --   open = function()
-      --     require("trouble").open({ mode = "quickfix", focus = false })
-      --   end,
-      -- },
     })
   end,
   keys = {
@@ -82,13 +77,13 @@ return {
       end,
       desc = "Stop (Neotest)",
     },
-    {
-      "<leader>tw",
-      function()
-        require("neotest").watch.toggle(vim.fn.expand("%"))
-      end,
-      desc = "Toggle Watch (Neotest)",
-    },
+    -- {
+    --   "<leader>tw",
+    --   function()
+    --     require("neotest").watch.toggle(vim.fn.expand("%"))
+    --   end,
+    --   desc = "Toggle Watch (Neotest)",
+    -- },
     {
       "<leader>td",
       function()
