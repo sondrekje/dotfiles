@@ -1,136 +1,93 @@
+local parsers = {
+  "json",
+  "javascript",
+  "typescript",
+  "tsx",
+  "html",
+  "css",
+  "markdown",
+  "markdown_inline",
+  "lua",
+  "vim",
+  "bash",
+  "xml",
+  "yaml",
+  "regex",
+}
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    version = false,
+    branch = "main",
     build = ":TSUpdate",
-    dependencies = {
-      "windwp/nvim-ts-autotag",
-    },
     config = function()
-      local treesitter = require("nvim-treesitter.configs")
+      -- replicate `ensure_installed`, runs asynchronously, skips existing languages
+      require("nvim-treesitter").install(parsers)
 
-      require("nvim-ts-autotag").setup({
-        enable = true,
-        per_filetype = { "html", "xml", "tsx" },
-      })
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("treesitter.setup", {}),
+        callback = function(args)
+          local buf = args.buf
+          local filetype = args.match
 
-      treesitter.setup({
-        highlight = { enable = true },
-        indent = { enable = true },
-        ignore_install = { "all" },
-        auto_install = false,
-        sync_install = false,
-        modules = {},
-        cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
-        keys = {
-          { "<c-space>", desc = "Increment Selection" },
-          { "<bs>", desc = "Decrement Selection" },
-        },
-        opts_extend = { "ensure_installed" },
-        ensure_installed = {
-          "json",
-          "javascript",
-          "typescript",
-          "tsx",
-          "html",
-          "css",
-          "markdown",
-          "lua",
-          "vim",
-          "bash",
-          "markdown",
-          "markdown_inline",
-          "xml",
-          "yaml",
-          "regex",
-        },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "<C-space>",
-            node_incremental = "<C-space>",
-            scope_incremental = false,
-            node_decremental = "<bs>",
-          },
-        },
-        textobjects = {
-          select = {
-            enable = true,
+          -- you need some mechanism to avoid running on buffers that do not
+          -- correspond to a language (like oil.nvim buffers), this implementation
+          -- checks if a parser exists for the current language
+          local language = vim.treesitter.language.get_lang(filetype) or filetype
+          if not vim.treesitter.language.add(language) then
+            return
+          end
 
-            lookahead = true,
-          },
-          lsp_interop = {
-            enable = true,
-            border = "none",
-            floating_preview_opts = {},
-            peek_definition_code = {
-              ["<leader>df"] = "@function.outer",
-              ["<leader>dF"] = "@class.outer",
-            },
-          },
-          move = {
-            enable = true,
-            goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
-            goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
-            goto_previous_start = { ["[f"] = "@function.outer", ["[c"] = "@class.outer", ["[a"] = "@parameter.inner" },
-            goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
-          },
-        },
+          -- replicate `fold = { enable = true }`
+          vim.wo.foldmethod = "expr"
+          vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+          -- replicate `highlight = { enable = true }`
+          vim.treesitter.start(buf, language)
+
+          -- replicate `indent = { enable = true }`
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+          -- `incremental_selection = { enable = true }` covered by 0.12.0
+        end,
       })
     end,
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
-    event = "VeryLazy",
+    branch = "main",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = function()
-      require("nvim-treesitter.configs").setup({
-        textobjects = {
-          select = {
-            enable = true,
-
-            lookahead = true,
-          },
-          lsp_interop = {
-            enable = true,
-            border = "none",
-            floating_preview_opts = {},
-            peek_definition_code = {
-              ["<leader>df"] = "@function.outer",
-              ["<leader>dF"] = "@class.outer",
-            },
-          },
-          move = {
-            enable = true,
-            goto_next_start = {
-              ["]f"] = "@function.outer",
-              ["]c"] = "@class.outer",
-              ["]a"] = "@parameter.inner",
-              ["]S"] = "@scope",
-            },
-            goto_previous_start = {
-              ["[f"] = "@function.outer",
-              ["[c"] = "@class.outer",
-              ["[a"] = "@parameter.inner",
-              ["[S"] = "@scope",
-            },
-            goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
-            goto_previous_end = { ["[F"] = "@function.outer", ["[C"] = "@class.outer", ["[A"] = "@parameter.inner" },
-          },
+      require("nvim-treesitter-textobjects").setup({
+        move = {
+          set_jumps = true,
+        },
+        select = {
+          lookahead = true,
         },
       })
 
-      local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+      local move = require("nvim-treesitter-textobjects.move")
 
-      -- Repeat movement with ; and ,
-      -- vim way: ; goes to the direction you were moving.
-      vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
-      vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
+      vim.keymap.set({ "n", "x", "o" }, "]f", function()
+        move.goto_next_start("@function.outer", "textobjects")
+      end, { desc = "Next function start" })
 
-      -- Optionally, make builtin f, F, t, T also repeatable with ; and ,
-      vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
-      vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
-      vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
-      vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
+      vim.keymap.set({ "n", "x", "o" }, "[f", function()
+        move.goto_previous_start("@function.outer", "textobjects")
+      end, { desc = "Previous function start" })
+
+      vim.keymap.set({ "n", "x", "o" }, "]F", function()
+        move.goto_next_end("@function.outer", "textobjects")
+      end, { desc = "Next function end" })
+
+      vim.keymap.set({ "n", "x", "o" }, "[F", function()
+        move.goto_previous_end("@function.outer", "textobjects")
+      end, { desc = "Previous function end" })
+
+      local repeat_move = require("nvim-treesitter-textobjects.repeatable_move")
+      vim.keymap.set({ "n", "x", "o" }, ";", repeat_move.repeat_last_move)
+      vim.keymap.set({ "n", "x", "o" }, ",", repeat_move.repeat_last_move_opposite)
     end,
   },
   {

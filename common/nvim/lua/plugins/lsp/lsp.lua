@@ -8,7 +8,6 @@ return {
       { "mason-org/mason.nvim" },
       { "mason-org/mason-lspconfig.nvim" },
       { "folke/lazydev.nvim", ft = "lua", opts = {} },
-      -- { "antosha418/nvim-lsp-file-operations", config = true },
     },
     opts = function()
       ---@class PluginLspOpts
@@ -115,11 +114,7 @@ return {
           -- Codelens on attach
           if options.codelens.enabled then
             if client:supports_method("textDocument/codeLens") then
-              vim.lsp.codelens.refresh()
-              vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-                buffer = buf,
-                callback = vim.lsp.codelens.refresh,
-              })
+              vim.lsp.codelens.enable(true, { bufnr = args.buf })
             end
           end
 

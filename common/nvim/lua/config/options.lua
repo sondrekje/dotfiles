@@ -154,6 +154,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "tsplayground",
     "fugitiveblame",
     "dap-float",
+    "neotest-output-panel",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false

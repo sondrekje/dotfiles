@@ -1,5 +1,6 @@
 return {
   "nvim-neotest/neotest",
+  lazy = true,
   dependencies = {
     "nvim-neotest/nvim-nio",
     "nvim-lua/plenary.nvim",
@@ -7,6 +8,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     "nvim-neotest/neotest-jest",
     "mfussenegger/nvim-dap",
+    "marilari88/neotest-vitest",
   },
   config = function(_)
     require("neotest").setup({
@@ -14,6 +16,7 @@ return {
         require("neotest-jest")({
           jestCommand = "npm test --",
         }),
+        require("neotest-vitest"),
       },
       status = { virtual_text = true },
       output = { open_on_run = true },

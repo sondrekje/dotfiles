@@ -31,6 +31,12 @@ return {
           d = { "%f[%d]%d+" }, -- digits
           u = ai.gen_spec.function_call(), -- u for "Usage"
         },
+        mappings = {
+          around_next = "aN",
+          inside_next = "iN",
+          around_last = "aL",
+          inside_last = "iL",
+        },
       }
     end,
     config = function(_, opts)
