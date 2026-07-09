@@ -59,7 +59,6 @@ return {
         },
         servers = {
           lua_ls = {
-            mason = false,
             settings = {
               Lua = {
                 diagnostics = { globals = { "vim" } },
@@ -90,7 +89,6 @@ return {
 
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = options.ensure_installed or { "lua_ls" },
         automatic_enable = true,
       })
 
@@ -132,19 +130,21 @@ return {
             end, bufopts)
           end
 
-          local bufopts = { buffer = buf, silent = true, desc = "Add Missing Imports" }
-          vim.keymap.set("n", "grM", function()
-            vim.lsp.buf.code_action({
-              context = {
-                diagnostics = {}, -- must include this even if empty
-                only = {
-                  ---@diagnostic disable-next-line: assign-type-mismatch
-                  "source.addMissingImports",
+          if client:supports_method("textDocument/codeAction") then
+            local bufopts = { buffer = buf, silent = true, desc = "Add Missing Imports" }
+            vim.keymap.set("n", "grM", function()
+              vim.lsp.buf.code_action({
+                context = {
+                  diagnostics = {}, -- must include this even if empty
+                  only = {
+                    ---@diagnostic disable-next-line: assign-type-mismatch
+                    "source.addMissingImports",
+                  },
                 },
-              },
-              apply = true, -- auto-apply the single returned action
-            })
-          end, bufopts)
+                apply = true, -- auto-apply the single returned action
+              })
+            end, bufopts)
+          end
         end,
       })
     end,
