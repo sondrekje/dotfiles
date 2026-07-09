@@ -28,13 +28,6 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" vim9 script isn't in official debian repo until Trixie release :(
-if has('vim9script') && 0 " disabled
-    let g:usevim9script = 1
-else
-    let g:usevim9script = 0
-endif
-
 " ======= PLUGIN SETUP =======
 call plug#begin('~/.vim/plugged')
 
@@ -51,18 +44,8 @@ Plug 'tpope/vim-sensible' " sensible defaults
 Plug 'tpope/vim-speeddating' " extends increment/decrement to work on dates,times,etc
 
 Plug 'ntpeters/vim-better-whitespace' " highlight and clean trailing whitespaces
-
-" vim9+ :)
-if g:usevim9script
-    Plug 'yegappan/lsp'
-    Plug 'girishji/vimcomplete'
-    Plug 'girishji/autosuggest.vim' " autosuggest for cmdline vim mode
-endif
-
 Plug 'LunarWatcher/auto-pairs'
 Plug 'szw/vim-maximizer'
-
-Plug 'easymotion/vim-easymotion'
 
 Plug 'preservim/nerdtree'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -90,15 +73,13 @@ set background=dark
 let g:airline_theme='base16_gruvbox_dark_hard'
 
 " vim-better-whitespace settings
-let g:strip_max_file_size = 5000 " performance, should tune this a bit
-let g:strip_whitespace_on_save = 1 " auto-strip on save
-let g:strip_whitespace_confirm = 0 " without confirmation
-let g:strip_only_modified_lines = 1 " but only on modified lines as to not cause unnecessary VSC diffs
-let g:show_spaces_that_precede_tabs = 1 " highlight mixing of spaces and tabs
+let g:strip_max_file_size = 5000
+let g:strip_whitespace_on_save = 1
+let g:strip_whitespace_confirm = 0
+let g:strip_only_modified_lines = 1
+let g:show_spaces_that_precede_tabs = 1
 
 " ======= KEYBINDINGS =======
-" unbind ex mode, use for formatting instead
-map Q gq
 
 nnoremap <leader>sH :split<CR>
 nnoremap <leader>sV :vsplit<CR>
@@ -107,43 +88,6 @@ nnoremap <leader>sZ :MaximizerToggle<CR>
 
 nnoremap <Tab> :bnext<CR>
 nnoremap <C-Tab> :bprev<CR>
-
-if g:usevim9script == 1
-    """ lsp bindings
-    let g:vimcomplete_tab_enable = 1
-
-    " goto/peek definitions, declariations, references, implementations
-    nnoremap <leader>gd :LspGotoDefinition<CR>
-    nnoremap <leader>gD :LspPeekDefinition<CR>
-    nnoremap <leader>gdi :LspGotoDeclaration<CR>
-    nnoremap <leader>gu :LspShowReferences<CR>
-    nnoremap <leader>gU :LspPeekReferences<CR>
-    nnoremap <leader>gi :LspGotoImpl<CR>
-    nnoremap <leader>gI :LspPeekImpl<CR>
-    nnoremap <leader>go :LspGotoTypeDef<CR>
-    nnoremap <leader>gO :LspPeekTypeDef<CR>
-    nnoremap <leader>gI :LspPeekImpl<CR>
-    nnoremap <leader>fD :LspSymbolSearch<CR>
-
-    " info and documentation
-    nnoremap <leader>gh :LspHover<CR>
-    vnoremap <leader>gh :LspHover<CR>
-    nnoremap <leader>ge :LspDiag current<CR>
-    nnoremap <leader>gp :LspShowSignature<CR>
-
-    " symbols and actions
-    nnoremap <leader>gs :LspDocumentSymbol<CR>
-    nnoremap <leader>ga :LspCodeAction<CR>
-    nnoremap <leader>F :LspFormat<CR>
-    vnoremap <leader>F :LspFormat<CR>
-    nnoremap <leader>rn :LspRename<CR>
-    nnoremap <leader>e :LspDiag next<CR>
-    nnoremap <leader>E :LspDiag prev<CR>
-    nnoremap <leader>le :LspDiag show<CR>
-    nnoremap <leader>hl :LspHighlight<CR>
-    nnoremap <leader>hlc :LspHighlightClear<CR>
-    nnoremap <leader>lsL :LspCodeLens<CR>
-endif
 
 nnoremap <leader>rg :Rg<space>
 nnoremap <leader>ff :Files<CR>
@@ -195,28 +139,6 @@ vnoremap . :normal .<CR>
 
 nmap <F8> :TagbarToggle<CR>
 
-" === Easymotion keybindings
-" Easy navigation with easymotion plugin
-nmap s <Plug>(easymotion-overwin-f2)
-
-" <Leader>f{char} to move to {char}
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
-
-" Move to line
-map <Leader>L <Plug>(easymotion-bd-jk)
-nmap <Leader>L <Plug>(easymotion-overwin-line)
-
-" Move to word
-map  <Leader>w <Plug>(easymotion-bd-w)
-nmap <Leader>w <Plug>(easymotion-overwin-w)
-
-" open cheatsheet
-command Cheatsheet new | setlocal buftype=nofile bufhidden=hide noswapfile | execute "resize" . float2nr(&lines * 0.4) | e ~/git/local/cheatsheets/vim/general.md
-
-nnoremap <leader>cheatsheet :Cheatsheet<CR>
-nnoremap <leader>cs :Cheatsheet<CR>
-
 " Function to safely close the current buffer and switch to the previous one
 function! CloseCurrentBuffer()
     " Check if there is an alternate buffer
@@ -236,12 +158,6 @@ nnoremap <leader>xb :call CloseCurrentBuffer()<CR>
 "
 " close all buffers and re-open last buffer for editing
 nnoremap <leader>xXb :%bd\|e#<CR>
-
-" autocomplete
-let g:asyncomplete_auto_popup = 1
-let g:asyncomplete_auto_completeopt = 0
-let g:asyncomplete_min_chars = 1
-let g:asyncomplete_prevent_double_pop = 1
 
 " Auto need tree when no file
 autocmd StdinReadPre * let s:std_in=1
@@ -264,61 +180,3 @@ let g:fzf_colors =
   \ 'spinner':    ['fg', 'Label'],
   \ 'header':     ['fg', 'Comment'] }
 
-if g:usevim9script
-    let lspOpts = #{}
-    autocmd User LspSetup call LspOptionsSet(lspOpts)
-
-    " TODO: ideally conditonally based on what's available in path too
-    let lspServers = [#{
-        \   name: 'bashls',
-        \   filetype: ['sh', 'bash'],
-        \   path: 'bash-language-server',
-        \   args: ['start']
-        \},
-        \#{
-        \   name: 'vscode-css-server',
-        \   filetype: ['css'],
-        \   path: expand('$NVM_BIN/vscode-css-language-server'),
-        \   args: ['--stdio']
-        \},
-        \#{
-        \   name: 'vscode-eslint-server',
-        \   filetype: ['javascript', 'typescript', 'typescriptreact'],
-        \   path: expand('$NVM_BIN/vscode-eslint-language-server'),
-        \   args: ['--stdio']
-        \},
-        \#{
-        \   name: 'vscode-html-server',
-        \   filetype: ['html'],
-        \   path: expand('$NVM_BIN/vscode-html-language-server'),
-        \   args: ['--stdio']
-        \},
-        \#{
-        \   name: 'vscode-json-server',
-        \   filetype: ['json'],
-        \   path: expand('$NVM_BIN/vscode-json-language-server'),
-        \   args: ['--stdio']
-        \},
-        \#{
-        \   name: 'vscode-markdown-server',
-        \   filetype: ['markdown'],
-        \   path: expand('$NVM_BIN/vscode-markdown-language-server'),
-        \   args: ['--stdio']
-        \},
-        \#{
-        \   name: 'tsserver',
-        \   filetype: ['javascript', 'typescript', 'typescriptreact'],
-        \   path: 'typescript-language-server',
-        \   args: ['--stdio']
-        \},
-        \#{
-        \   name: 'vimls',
-        \   filetype: ['vim'],
-        \   path: 'vim-language-server',
-        \   args: ['--stdio']
-        \}]
-
-    autocmd User LspSetup call LspAddServer(lspServers)
-
-    autocmd CursorHoldI * silent! LspShowSignature
-endif
