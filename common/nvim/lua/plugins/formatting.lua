@@ -42,6 +42,11 @@ return {
       if bufname:match("/node_modules/") then
         return
       end
+
+      if vim.bo[bufnr].filetype == "xml" then
+        return
+      end
+
       return { timeout_ms = 500, lsp_format = "fallback" }
     end,
     -- Customize formatters
@@ -49,10 +54,6 @@ return {
       shfmt = {
         prepend_args = { "-i", "2" },
       },
-      json = { "prettierd", "prettier", stop_after_first = true },
-      javascript = { "prettierd", "prettier", stop_after_first = true },
-      typescript = { "prettierd", "prettier", stop_after_first = true },
-      lua = { "stylua" },
     },
   },
   init = function()

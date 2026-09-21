@@ -3,7 +3,68 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        kotlin_lsp = {},
+        kotlin_lsp = {
+          settings = {
+            ["jetbrains.kotlin.hints.parameters"] = true,
+            ["jetbrains.kotlin.hints.parameters.compiled"] = true,
+            ["jetbrains.kotlin.hints.settings.types.property"] = true,
+            ["jetbrains.kotlin.hints.settings.types.variable"] = true,
+            ["jetbrains.kotlin.hints.type.function.return"] = true,
+            ["jetbrains.kotlin.hints.type.function.parameter"] = true,
+            ["jetbrains.kotlin.hints.settings.lambda.return"] = true,
+            ["jetbrains.kotlin.hints.lambda.receivers.parameters"] = true,
+            ["jetbrains.kotlin.hints.settings.value.ranges"] = true,
+            ["jetbrains.kotlin.hints.value.kotlin.time"] = true,
+          },
+        },
+        handlers = {
+          ["workspace/configuration"] = function(_, params)
+            local result = {}
+
+            for _, item in ipairs(params.items or {}) do
+              if item.section == "jetbrains.kotlin" then
+                table.insert(result, {
+                  hints = {
+                    parameters = true,
+                    ["parameters.compiled"] = true,
+                    settings = {
+                      types = {
+                        property = true,
+                        variable = true,
+                      },
+                      lambda = {
+                        ["return"] = true,
+                      },
+                      value = {
+                        ranges = true,
+                      },
+                    },
+                    type = {
+                      ["function"] = {
+                        ["return"] = true,
+                        parameter = true,
+                      },
+                    },
+                    lambda = {
+                      receivers = {
+                        parameters = true,
+                      },
+                    },
+                    value = {
+                      kotlin = {
+                        time = true,
+                      },
+                    },
+                  },
+                })
+              else
+                table.insert(result, vim.NIL)
+              end
+            end
+
+            return result
+          end,
+        },
       },
     },
     init = function()
@@ -21,7 +82,10 @@ return {
             vim.bo[buf].buftype = "nofile"
 
             local client = vim.iter(vim.lsp.get_clients({ name = "kotlin_lsp" })):next()
-            assert(client, "No kotlin_lsp client")
+            if not client then
+              vim.notify("kotlin_lsp not available for decomplation", vim.log.levels.INFO)
+              return
+            end
 
             local done = false
 

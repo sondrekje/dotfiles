@@ -92,8 +92,10 @@ return {
         automatic_enable = true,
       })
 
+      local lspGroup = vim.api.nvim_create_augroup("my.lsp", { clear = true })
+
       vim.api.nvim_create_autocmd("LspAttach", {
-        group = vim.api.nvim_create_augroup("my.lsp", {}),
+        group = lspGroup,
         callback = function(args)
           local buf = args.buf
           local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
@@ -116,6 +118,18 @@ return {
             end
           end
 
+          -- Folding on attach
+          if client:supports_method("textDocument/foldingRange") then
+            vim.api.nvim_set_option_value("foldmethod", "expr", {
+              scope = "local",
+              win = 0,
+            })
+            vim.api.nvim_set_option_value("foldexpr", "v:lua.vim.lsp.foldexpr()", {
+              scope = "local",
+              win = 0,
+            })
+          end
+
           if client:supports_method("textDocument/codeAction") then
             local bufopts = { buffer = buf, silent = true, desc = "Remove Unused Imports" }
             vim.keymap.set("n", "grU", function()
@@ -129,7 +143,6 @@ return {
               })
             end, bufopts)
           end
-
           if client:supports_method("textDocument/codeAction") then
             local bufopts = { buffer = buf, silent = true, desc = "Add Missing Imports" }
             vim.keymap.set("n", "grM", function()
