@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+PID="$(aerospace list-windows --focused --format '%{app-pid}')"
+
+if [ -n "$PID" ]; then
+  kill -9 "$PID"
+fi

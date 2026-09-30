@@ -8,6 +8,7 @@ declare -A recommended_cli_tools=(
     [ripgrep]="https://github.com/BurntSushi/ripgrep|Very quick recursive search which respects .gitignore"
     [bat]="https://github.com/sharkdp/bat|A cat clone with syntax highlighting and custom theme support"
     [neovim]="https://github.com/neovim/neovim|Vim-fork focused on extensability and usability"
+    [tree-sitter-cli]="https://tree-sitter.github.io/tree-sitter|Parser generator tool, used by Neovim"
     [delta]="https://github.com/dandavison/delta|A syntax-highlighting pager for git, diff, grep and blame output (supports custom themes, same as bat)"
     [hexyl]="https://github.com/sharkdp/hexyl|A modern CLI hex viewer written in Rust"
     [btop]="https://github.com/aristocratos/btop|A fancy system resource monitor tool which suppors custom themes"
@@ -17,6 +18,7 @@ declare -A recommended_cli_tools=(
     [openshift-cli]="https://github.com/openshift/oc|The OpenShift command-line interface"
     [stern]="https://github.com/stern/stern|Multi pod and container log tailing for kubernetes"
     [pgcli]="https://github.com/dbcli/pgcli|Postgres CLI with autocompletion and syntax highlighting"
+    [rustup]="https://rust-lang.github.io/rustup|Rust toolchain installer"
 )
 
 declare -A required_cli_tools_zsh_integrated=(
@@ -28,11 +30,10 @@ declare -A required_cli_tools_zsh_integrated=(
 declare -A recommended_cli_tools_zshrc_integrated=(
     [eza]="https://github.com/eza-community/eza|Modern replacement for ls"
     [fd]="https://github.com/sharkdp/fd|A modern, simple, fast and user-friendly alternative to 'find'"
-    [navi]="https://github.com/denisidoro/navi|Interactive cheatsheet tool for the terminal, included as a ZSH widget (CTRL+G)"
 )
 
 declare -A recommended_gui_apps=(
-    [alacritty]="https://github.com/alacritty/alacritty|A fast, cross-platform, OpenGL terminal emulator"
+    [ghostty]="https://ghostty.org|A fast, cross-platform terminal emulator"
     [alfred]="https://www.alfredapp.com|A productivity app that boosts your efficiency with hotkeys, keywords, text expansion, and more"
     [alt-tab]="https://alt-tab-macos.netlify.app|A macOS utility that lets you switch between open apps and windows using Alt-Tab like in Windows"
     [firefox@developer-edition]="https://www.mozilla.org/en-US/firefox/developer|A version of Firefox tailored for web developers"
@@ -90,8 +91,8 @@ prompt_install_required_cli_tools_zshrc_integrated() {
     local all_tools_installed=true
 
     for tool in "${!required_cli_tools_zsh_integrated[@]}"; do
-        IFS="|" read -r url description <<< "${required_cli_tools_zsh_integrated[$tool]}"
-        if ! brew ls "$tool" &> /dev/null; then
+        IFS="|" read -r url description <<<"${required_cli_tools_zsh_integrated[$tool]}"
+        if ! brew ls "$tool" &>/dev/null; then
             all_tools_installed=false
             echo "$tool: $description"
             echo "See GitHub repository: $url"
@@ -107,7 +108,6 @@ prompt_install_required_cli_tools_zshrc_integrated() {
         echo "All required tools are already installed. Proceeding..."
         return 0
     fi
-
 
     read -p "Would you like to proceed with installing these required tools? (y/n): " proceed_yes_no
     if [[ "$proceed_yes_no" != "y" ]]; then
@@ -133,7 +133,7 @@ prompt_install_required_cli_tools_zshrc_integrated() {
 prompt_install_recommended_cli_tools_zshrc_integrated() {
     echo "The following ZSH tools are recommended and integrated with .zshrc:"
     for tool in "${!recommended_cli_tools_zshrc_integrated[@]}"; do
-        IFS="|" read -r url description <<< "${recommended_cli_tools_zshrc_integrated[$tool]}"
+        IFS="|" read -r url description <<<"${recommended_cli_tools_zshrc_integrated[$tool]}"
         echo "$tool: $description"
         echo "See GitHub repository: $url"
 
@@ -152,7 +152,7 @@ prompt_install_recommended_cli_tools_zshrc_integrated() {
 prompt_install_recommended_cli_tools() {
     echo "The following CLI tools are recommended:"
     for tool in "${!recommended_cli_tools[@]}"; do
-        IFS="|" read -r url description <<< "${recommended_cli_tools[$tool]}"
+        IFS="|" read -r url description <<<"${recommended_cli_tools[$tool]}"
         echo "$tool: $description"
         echo "See GitHub repository: $url"
 
@@ -199,7 +199,7 @@ prompt_install_sdkman() {
         read -p "Would you like to install sdkman? (y/n): " install_tool
 
         if [[ "$install_tool" == "y" ]]; then
-            brew tap sdkman/tap && brew install sdkman-cli
+            curl -s "https://get.sdkman.io" | zsh
         fi
     }
 }
@@ -227,7 +227,7 @@ prompt_install_tiling_window_manager() {
 prompt_install_recommended_gui_apps() {
     echo "The following GUI applications are recommended (not necessarily all at once):"
     for tool in "${!recommended_gui_apps[@]}"; do
-        IFS="|" read -r url description <<< "${recommended_gui_apps[$tool]}"
+        IFS="|" read -r url description <<<"${recommended_gui_apps[$tool]}"
         echo "$tool: $description"
         echo "See official website: $url"
 
@@ -259,4 +259,3 @@ prompt_install_tiling_window_manager
 prompt_install_recommended_gui_apps
 
 $colima_installed && post_install_colima_docker_prompt
-

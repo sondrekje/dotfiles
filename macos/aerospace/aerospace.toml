@@ -101,9 +101,11 @@ plus = 'minus'
 #     activate
 # end tell'
 # '''
-alt-shift-cmd-ctrl-enter = '''exec-and-forget open -na alacritty --args --working-directory ~ -e tmux'''
-alt-shift-enter = '''exec-and-forget open -na alacritty --args --working-directory ~ -e tmux a'''
+alt-shift-cmd-ctrl-enter = '''exec-and-forget open -na ghostty --args --working-directory="$HOME" -e tmux'''
+alt-shift-enter = '''exec-and-forget open -na ghostty --args --working-directory="$HOME" -e tmux a'''
 alt-shift-cmd-ctrl-f = '''exec-and-forget open -na Firefox\ Developer\ Edition'''
+
+alt-shift-cmd-ctrl-f4 = '''exec-and-forget /bin/zsh -lc "$HOME/bin/aerospace_force_kill_focused"'''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 

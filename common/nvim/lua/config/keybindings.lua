@@ -19,6 +19,7 @@ vim.keymap.set("v", "<C-s>", "<Cmd>w<CR>")
 vim.keymap.set("n", "<leader>y", '"*yy', { noremap = true, silent = true })
 vim.keymap.set("v", "<leader>y", '"*y', { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>p", ':set paste<CR>"*p:set nopaste<CR>') -- Paste from clipboard
+vim.keymap.set("n", "<leader>P", ':set paste<CR>"*P:set nopaste<CR>') -- Paste from clipboard
 vim.keymap.set("v", "<leader>p", '<Esc>:set paste<CR>gv"*p:set nopaste<CR>')
 vim.keymap.set("n", "<C-a>", "ggVG", { noremap = true, silent = true })
 

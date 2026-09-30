@@ -1,0 +1,42 @@
+# Habamax
+# Inspired by:
+# https://github.com/habamax/vim-habamax
+
+background = #1C1C1C
+foreground = #9E9E9E
+
+# Cursor
+cursor-color = #D7875F
+cursor-text = #1C1C1C
+
+# Search matches
+search-foreground = #1C1C1C
+search-background = #AFD7AF
+
+# Focused search match
+search-selected-foreground = #1C1C1C
+search-selected-background = #D7D787
+
+# Selection
+selection-foreground = #1C1C1C
+selection-background = #D7875F
+
+# Normal colors
+palette = 0=#1C1C1C
+palette = 1=#D75F5F
+palette = 2=#87AF87
+palette = 3=#AFAF87
+palette = 4=#5F87AF
+palette = 5=#AF87AF
+palette = 6=#5F8787
+palette = 7=#9E9E9E
+
+# Bright colors
+palette = 8=#767676
+palette = 9=#D7875F
+palette = 10=#AFD7AF
+palette = 11=#D7D787
+palette = 12=#87AFD7
+palette = 13=#D7AFD7
+palette = 14=#87AFAF
+palette = 15=#BCBCBC

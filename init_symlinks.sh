@@ -6,6 +6,7 @@ DOTFILES_REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 DOTFILES_SYMLINK="$HOME/.dotfiles"
 COMMON_SYMLINK_DIR="$DOTFILES_SYMLINK/common"
 MACOS_SYMLINK_DIR="$DOTFILES_SYMLINK/macos"
+JETBRAINS_SYMLINK_DIR="$DOTFILES_SYMLINK/jetbrains"
 
 OS_TYPE="$(uname -s)"
 
@@ -62,7 +63,7 @@ prompt_for_existing_file() {
             echo "Backed up $target to $BACKUP_DIR/"
             return 0
             ;;
-         "Overwrite without backup (only if symlink)")
+        "Overwrite without backup (only if symlink)")
             if [[ -L "$target" ]]; then
                 echo "Overwriting existing symlink: $target"
                 rm "$target"
@@ -108,6 +109,8 @@ create_symlink() {
     local target="$2"
     local real_path
 
+    mkdir -p -- "$(dirname "$target")"
+
     # remove broken symlinks
     if [[ ! -e "$target" ]] && [[ -L "$target" ]]; then
         echo "Warning: Unlinking broken symlink $target"
@@ -134,6 +137,7 @@ setup_zsh_symlinks() {
     declare -A ZSH_SYMLINKS=(
         ["$COMMON_SYMLINK_DIR/zsh/zshrc"]="$HOME/.zshrc"
         ["$COMMON_SYMLINK_DIR/ohmyposh/theme.toml"]="$HOME/.config/ohmyposh/theme.toml"
+        ["$COMMON_SYMLINK_DIR/ghostty/themes/habamax"]="$HOME/.config/ghostty/themes/habamax"
         ["$COMMON_SYMLINK_DIR/zsh/ohmyposh.zsh"]="$HOME/.config/zsh/ohmyposh.zsh" # zinit snippet wrapper
     )
 
@@ -154,10 +158,12 @@ setup_neovim_symlinks() {
 symlink_standalone_components() {
     declare -A SYMLINKS=(
         ["$COMMON_SYMLINK_DIR/alacritty/alacritty.toml"]="$HOME/.config/alacritty/alacritty.toml"
+        ["$COMMON_SYMLINK_DIR/ghostty/config"]="$HOME/.config/ghostty/config"
         ["$COMMON_SYMLINK_DIR/pgcli/config"]="$HOME/.config/pgcli/config"
         ["$COMMON_SYMLINK_DIR/tmux/tmux.config"]="$HOME/.tmux.conf"
         ["$COMMON_SYMLINK_DIR/bat/config"]="$HOME/.config/bat/config"
         ["$COMMON_SYMLINK_DIR/vim/vimrc"]="$HOME/.vimrc"
+        ["$JETBRAINS_SYMLINK_DIR/ideavimrc"]="$HOME/.ideavimrc"
     )
 
     if [[ "$OS_TYPE" == "Darwin" ]]; then
@@ -185,11 +191,11 @@ symlink_standalone_components() {
     done
 }
 
-
 symlink_bin_scripts() {
     declare -A BIN_SCRIPTS=(
         ["$COMMON_SYMLINK_DIR/bin/uptime_human_readable"]="Displays system uptime in a human-readable format|Integrated in tmux configuration"
         ["$COMMON_SYMLINK_DIR/bin/aerospace_get_focused_window_label"]="Fetches the focused window label title|Integrated in tmux configuration"
+        ["$COMMON_SYMLINK_DIR/bin/aerospace_force_kill_focused"]="Force kills the focused window using SIGKILL|Integrated in aerospace configuration"
         ["$COMMON_SYMLINK_DIR/bin/rfv"]="Rg/fzf (toggle CTRL-T) and open in VIM|https://github.com/junegunn/fzf/blob/master/ADVANCED.md#switching-between-ripgrep-mode-and-fzf-mode-using-a-single-key-binding"
     )
 
@@ -200,7 +206,7 @@ symlink_bin_scripts() {
         target="$HOME/bin/$(basename "$source")"
 
         echo ""
-        IFS='|' read -r description additional_info <<< "${BIN_SCRIPTS[$source]}"
+        IFS='|' read -r description additional_info <<<"${BIN_SCRIPTS[$source]}"
         description=$(echo "$description" | xargs)
 
         if check_already_symlinked_ok "$source" "$target"; then
@@ -244,4 +250,3 @@ echo ""
 echo "OK: Dotfiles setup complete"
 
 exit 0
-

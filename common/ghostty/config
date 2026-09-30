@@ -1,0 +1,22 @@
+# TERM
+term = xterm-256color
+
+# Window
+window-padding-x = 10
+window-padding-y = 10
+
+background-opacity = 0.80
+background-blur = true
+
+macos-option-as-alt = left
+
+# Font
+font-family = "MesloLGS Nerd Font Mono"
+font-family-bold = "MesloLGS Nerd Font Mono"
+font-family-italic = "MesloLGS Nerd Font Mono"
+font-family-bold-italic = "MesloLGS Nerd Font Mono"
+
+font-size = 15
+font-thicken = true
+
+theme = habamax
