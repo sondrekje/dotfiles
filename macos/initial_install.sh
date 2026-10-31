@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-colima_installed=false
-
 declare -A recommended_cli_tools=(
-    [nvm]="https://github.com/nvm-sh/nvm|A tool to switch between (and download) different node versions"
+    [fnm]="https://github.com/Schniz/fnm|A fast Node.js version manager written in Rust"
     [universal-ctags]="https://github.com/universal-ctags/ctags|A maintained ctags implementation (required for 'vim-tagbar' plugin to work)"
     [ripgrep]="https://github.com/BurntSushi/ripgrep|Very quick recursive search which respects .gitignore"
     [bat]="https://github.com/sharkdp/bat|A cat clone with syntax highlighting and custom theme support"
@@ -63,25 +61,19 @@ check_zsh_up_to_date() {
     fi
 }
 
-prompt_install_colima_docker() {
-    local install_colima_docker
-    echo "See Colima on GitHub: https://github.com/abiosoft/colima"
+prompt_install_podman_docker() {
+    local install_podman_docker
+
+    echo "See Podman on GitHub: https://github.com/containers/podman"
     echo
-    read -p "Would you like to install Colima and Docker runtime (no Docker Desktop)? (y/n): " install_colima_docker
+    read -p "Would you like to install Podman and Docker CLI (no Docker Desktop)? (y/n): " install_podman_docker
 
-    if [[ "$install_colima_docker" == "y" ]]; then
-        echo "Installing Colima and Docker runtime..."
-        brew install --formula colima docker docker-compose
-        colima_installed=true
+    if [[ "$install_podman_docker" == "y" ]]; then
+        echo "Installing Podman and Docker CLI..."
+        brew install --formula podman docker docker-compose
     else
-        echo "Skipping Colima and Docker installation."
+        echo "Skipping Podman and Docker installation."
     fi
-}
-
-post_install_colima_docker_prompt() {
-    echo "Successfully installed colima (using Docker runtime)"
-    echo "You can start colima using 'colima start --edit'."
-    echo "The --edit flag is optional, but is encouraged as it allows you to customize the resources of the VM (default resources might be high for some setups)"
 }
 
 prompt_install_required_cli_tools_zshrc_integrated() {
@@ -195,13 +187,12 @@ prompt_install_security_tools() {
 prompt_install_sdkman() {
     echo "sdkman is a tool to seamlessly switch between (and install) different JVM based SDKs."
     echo
-    brew ls sdkman-cli &>/dev/null && echo "sdkman is already installed. Skipping..." || {
-        read -p "Would you like to install sdkman? (y/n): " install_tool
 
-        if [[ "$install_tool" == "y" ]]; then
-            curl -s "https://get.sdkman.io" | zsh
-        fi
-    }
+    read -p "Would you like to install sdkman? (y/n): " install_tool
+
+    if [[ "$install_tool" == "y" ]]; then
+        curl -s "https://get.sdkman.io" | zsh
+    fi
 }
 
 prompt_install_tiling_window_manager() {
@@ -212,16 +203,15 @@ prompt_install_tiling_window_manager() {
     echo "And also: https://github.com/FelixKratz/JankyBorders"
     echo
 
-    brew ls aerospace &>/dev/null &>/dev/null && echo "AeroSpace already installed. Skipping..." || {
-        read -p "Would you like to install window management tools (y/n)? " install_window_tools
+    read -p "Would you like to install window management tools (y/n)? " install_window_tools
 
-        if [[ "$install_window_tools" == "y" ]]; then
-            brew install --cask nikitabobko/tap/aerospace
-            brew install FelixKratz/formulae/borders
-        else
-            echo "Skipping window management tools."
-        fi
-    }
+    if [[ "$install_window_tools" == "y" ]]; then
+        brew install --cask nikitabobko/tap/aerospace
+        brew install FelixKratz/formulae/borders
+    else
+        echo "Skipping window management tools."
+    fi
+
 }
 
 prompt_install_recommended_gui_apps() {
@@ -246,16 +236,14 @@ prompt_install_recommended_gui_apps() {
 
 check_zsh_up_to_date # I can't ever remember manually installing zsh, and it's currently up to date - so this is mostly out of curiosity
 
-brew ls colima &>/dev/null && echo "Colima already installed, skipping." || prompt_install_colima_docker
+brew ls podman &>/dev/null && echo "Podman already installed, skipping..." || prompt_install_podman_docker
 
 prompt_install_required_cli_tools_zshrc_integrated
 prompt_install_recommended_cli_tools_zshrc_integrated
-prompt_install_sdkman
+[[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]] && echo "sdkman already installed, skipping..." || prompt_install_sdkman
 prompt_install_recommended_cli_tools
 
 prompt_install_security_tools
-prompt_install_tiling_window_manager
+brew ls aerospace &>/dev/null &>/dev/null && echo "AeroSpace already installed, skipping..." || prompt_install_tiling_window_manager
 
 prompt_install_recommended_gui_apps
-
-$colima_installed && post_install_colima_docker_prompt
