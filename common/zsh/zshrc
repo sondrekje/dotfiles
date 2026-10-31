@@ -51,7 +51,6 @@ fi
 zinit wait lucid light-mode for \
     atinit"zicompinit; zicdreplay"  \
     atload'opt_init_sdkman' \
-    atload'command -v colima &> /dev/null && export TESTCONTAINERS_HOST_OVERRIDE=$(colima ls -j | jq -r ".address")' \
     zdharma-continuum/fast-syntax-highlighting \
     zsh-users/zsh-completions \
     MichaelAquilina/zsh-you-should-use
@@ -105,8 +104,9 @@ fi
 
 alias zsh_profile_startup="time ZSH_DEBUGRC=1 zsh -i -c exit"
 
+# rootless podman
 export TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
-export DOCKER_HOST=unix://$HOME/.colima/default/docker.sock
+export TESTCONTAINERS_RYUK_DISABLED=true
 
 export PATH="$HOME/bin:$PATH"
 
