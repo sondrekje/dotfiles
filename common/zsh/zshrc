@@ -32,15 +32,16 @@ opt_init_sdkman() {
     fi
 }
 
+# Navigation aliases
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
+# Git helpers
 zinit wait lucid for \
-    atload"
-        alias ..='cd ..'
-        alias ...='cd ../..'
-        alias ....='cd ../../..'
-        alias .....='cd ../../../..'
-    " \
-	OMZL::git.zsh \
-	OMZP::git
+    OMZL::git.zsh \
+    OMZP::git
 
 zinit wait lucid light-mode for \
     atinit"zicompinit; zicdreplay"  \
