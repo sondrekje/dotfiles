@@ -43,10 +43,14 @@ zinit wait lucid for \
     OMZL::git.zsh \
     OMZP::git
 
+# NodeJS version management
+if (( $+commands[fnm] )); then
+    eval "$(fnm env --shell zsh)"
+fi
+
 zinit wait lucid light-mode for \
     atinit"zicompinit; zicdreplay"  \
     atload'opt_init_sdkman' \
-    atload'export NVM_DIR="$HOME/.nvm"; [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"' \
     atload'command -v colima &> /dev/null && export TESTCONTAINERS_HOST_OVERRIDE=$(colima ls -j | jq -r ".address")' \
     zdharma-continuum/fast-syntax-highlighting \
     zsh-users/zsh-completions \
