@@ -119,6 +119,7 @@ alt-shift-cmd-ctrl-o = 'exec-and-forget aerospace focus-back-and-forth || aerosp
 
 alt-shift-cmd-ctrl-b = 'balance-sizes'
 alt-shift-cmd-ctrl-z = 'fullscreen'
+alt-shift-cmd-ctrl-x = 'fullscreen --no-outer-gaps'
 
 alt-shift-cmd-ctrl-t = 'exec-and-forget aerospace layout floating tiling && aerospace move-mouse window-lazy-center'
 
@@ -180,6 +181,7 @@ f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling
 
 backspace = ['close-all-windows-but-current', 'mode main']
 
+alt-shift-cmd-ctrl-f4 = ['''exec-and-forget /bin/zsh -lc "$HOME/bin/aerospace_force_kill_focused"''', 'mode main']
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']
 
