@@ -1,5 +1,8 @@
 [[ -n "${ZSH_DEBUGRC+1}" ]] && zmodload zsh/zprof
 
+fpath[1,0]="$HOMEBREW_PREFIX/share/zsh/site-functions";
+export FPATH;
+
 # Ensure zinit installed and source
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
@@ -16,14 +19,6 @@ opt_init_sdkman() {
     if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then # default path
         # SDKMAN_DIR is set to default path by sdkman-init when it isn't set
         source "$HOME/.sdkman/bin/sdkman-init.sh"
-        return 0
-    fi
-
-    os=$(uname -s)
-    if [[ "$os" == "Darwin" ]]; then
-        # homebrew - we need to explicitly set SDKMAN_DIR
-        export SDKMAN_DIR=$(brew --prefix sdkman-cli)/libexec
-        source "$SDKMAN_DIR/bin/sdkman-init.sh"
         return 0
     fi
 }

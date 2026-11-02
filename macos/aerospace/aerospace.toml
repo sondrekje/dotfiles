@@ -63,10 +63,10 @@ preset = 'qwerty'
 [gaps]
 inner.horizontal = 10
 inner.vertical =   10
-outer.left =       10
-outer.bottom =     10
-outer.top =        10
-outer.right =      10
+outer.left = [{ monitor."Dell" = 32 }, 12]
+outer.bottom = [{ monitor."Dell" = 32 }, 12]
+outer.top = [{ monitor."Dell" = 32 }, 12]
+outer.right = [{ monitor."Dell" = 32 }, 12]
 
 [key-mapping.key-notation-to-key-code]
 hyphen = 'equal'

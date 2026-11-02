@@ -1,10 +1,4 @@
 return {
-  {
-    "numToStr/Comment.nvim",
-    config = function()
-      require("Comment").setup()
-    end,
-  },
   { "nvim-lua/plenary.nvim" },
   {
     "tpope/vim-fugitive",
